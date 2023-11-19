@@ -24,7 +24,50 @@ class TeacherController extends Controller
         return view('admin.content.teachers.index', compact('teachers', 'departments'));
     }
 
+    public function create() {
+        $departments = Department::all();
+        return view('admin.content.teachers.create', compact('departments'));
+    }
+
     public function store(Request $request) {
+        $request->validate([
+            'name'            => ['required', 'string'],
+            'email'           => ['required', 'email'],
+            'file'            => ['required', 'file'],
+            'gender'          => ['required'],
+            'address'         => ['required'],
+            'phone'           => ['required','max:10','min:10'],
+            'department'      => ['required'],
+            'salary'          => ['required'],
+            'join_date'       => ['required']
+        ],[
+
+            // name
+            'name.required' => ('اسم مطلوب'),
+            'name.string'   => ('يجب ان يكون من نوع نص'),
+            // email
+            'email.required' => ('البريد الالكتروني مطلوب'),
+            'email.email'    => ('يجب ان يكون بريد الكتروني'),
+            // image
+            'file.required' => ('الصورة الشخصية مطلوب'),
+            'file.file'     => ('يجب ان يتحتوي على صورة'),
+            // gender
+            'gender.required' => ('الجنس مطلوب'),
+            // address
+            'address.required' => ('العنوان مطلوب'),
+            // phone
+            'phone.required' => ('رقام ولي الامر مطلوب'),
+            'phone.max'      => ('يجب اقل من 10 ارقام'),
+            'phone.min'      => ('يجب اقل من 10 ارقام'), // مراجع
+            // department_id
+            'department.required' => ('اسم القسم مطلوب'),
+            // salary
+            'salary.required' => ('الراتب مطلوب'),
+            // join_date
+            'join_date.required' => ('تاريخ الانضمام مطلوب'),
+
+        ]);
+
         if($request->file('file')){
             $file = $request->file('file');
             $fileName = $file->hashName();

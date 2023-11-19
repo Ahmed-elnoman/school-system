@@ -20,7 +20,12 @@ class UserController extends Controller
         if(Auth::attempt(['name'=>$request->username , 'password' => $request->password])){
             return redirect()->route('dashboard');
         }else {
-            return redirect('login')->route('login')->with('error' , 'this user not exits');
+            if(!Auth::attempt(['password' => $request->password])){
+                session()->flash('error', 'كلمة السر غير صحيحة');
+                return redirect()->route('login');
+            }
+            session()->flash('error', 'المستخدم غير موجود');
+            return redirect()->route('login');
         }
     }
     public function dashboard() {

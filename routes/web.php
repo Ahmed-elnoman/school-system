@@ -50,6 +50,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
     // teacher routes
     Route::get('teacher/index', [TeacherController::class, 'index'])->name('teacher.index');
+    Route::get('teacher/crate', [TeacherController::class, 'create'])->name('teacher.create');
     Route::post('teacher/store', [TeacherController::class, 'store'])->name('teacher.store');
     Route::put('teacher/update', [TeacherController::class, 'update'])->name('teacher.update');
     Route::post('teacher/freeze', [TeacherController::class, 'freeze'])->name('teacher.freeze');

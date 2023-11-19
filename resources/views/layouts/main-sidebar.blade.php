@@ -53,7 +53,7 @@
                 <ul class="slide-menu">
 
 
-
+                    <li><a class="slide-item" href="{{ route('teacher.create') }}"> اضافة معلم</a></li>
                     <li><a class="slide-item" href="{{ route('teacher.index') }}">قائمة المعلمين</a></li>
 
 

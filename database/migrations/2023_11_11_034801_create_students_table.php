@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('full_name');
-            $table->string('email');
-            $table->string('password');
+            $table->string('name');
             $table->string('gender');
             $table->string('address');
             $table->boolean('status')->default(0);
             $table->integer('phone_parent');
+            $table->string('medical_situation');
             $table->date('join_date');
             $table->foreignId('chargeFor_id')->constrained('charge_fors');
             $table->foreignId('classRoom_id')->constrained('class_rooms');

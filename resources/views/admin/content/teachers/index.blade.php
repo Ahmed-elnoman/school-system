@@ -130,7 +130,7 @@
                                         <td>{{ $teachers->phone }}</td>
                                         <td class="text-info">{{ $teachers->department->name }}</td>
                                         <td>
-                                            @if ($teachers->salary > 100000)
+                                            @if ($teachers->salary > 100)
                                                 <span class="text-success">{{ $teachers->salary }}</span>
                                             @else
                                                 <span class="text-warning">{{ $teachers->salary }}</span>
