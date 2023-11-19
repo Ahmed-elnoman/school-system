@@ -204,8 +204,8 @@
                             <input type="text" class="form-control" id="student_name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">البريد الالكتروني</label>
-                            <input type="email" class="form-control" id="student_email" name="email">
+                            <label for="exampleInputEmail1">اسم ولي الامر</label>
+                            <input type="text" class="form-control" id="student_name" name="parent_name">
                         </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الجنس</label>
                         <select name="gender" id="gander" class="form-control" required>
@@ -213,9 +213,13 @@
                             <option value="ذكر">ذكر</option>
                             <option value="انثي">انثي</option>
                         </select>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">العنوان </label>
+                        <div class="form-group mt-1">
+                            <label for="exampleInputEmail1">العنوان التلميذ</label>
                             <input type="test" class="form-control" id="section_name" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">الحالة الصحية لتلميذ</label>
+                            <input type="test" class="form-control" id="section_name" name="medical_situation">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">رقم هاتف ولي الامر</label>
@@ -237,6 +241,19 @@
                         <select name="charge_for" id="charge_for" class="form-control" required>
 
                         </select>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">العنوان ولي الامر</label>
+                            <input type="test" class="form-control" id="section_name" name="parent_address">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">البريد الالكتروني ولي الامر</label>
+                            <input type="email" class="form-control" id="student_email" name="parent_email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">وظيفة ولي الامر</label>
+                            <input type="test" class="form-control" id="section_name" name="parent_job">
+                        </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">تاكيد</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>

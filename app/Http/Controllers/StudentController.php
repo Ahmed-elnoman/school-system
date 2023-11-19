@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChargeFor;
 use App\Models\ClassRoom;
 use App\Models\Issue;
+use App\Models\Parent;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,17 +34,24 @@ class StudentController extends Controller
     }
 
     public function store(Request $request) {
-        // return $request;
         Student::create([
-            'full_name'  => $request->name,
-            'email'      => $request->email,
-            'password'   => Hash::make('12341234'),
-            'gender'     => $request->gender,
-            'address'    => $request->address,
-            'phone_parent'  => $request->phone_parent,
-            'join_date'     => $request->join_date,
-            'chargeFor_id'  => $request->charge_for,
-            'classRoom_id'  => $request->class_room
+            'name'               => $request->name,
+            'gender'             => $request->gender,
+            'address'            => $request->address,
+            'medical_situation'  => $request->medical_situation,
+            'phone_parent'       => $request->phone_parent,
+            'join_date'          => $request->join_date,
+            'chargeFor_id'       => $request->charge_for,
+            'classRoom_id'       => $request->class_room
+        ]);
+        Parent::create([
+            'name'          => $request->parent_name,
+            'email'         => $request->parent_email,
+            'password'      => Hash::make('1231234'),
+            'phone'         => $request->phone_parent,
+            'address'       => $request->parent_address,
+            'job'           => $request->parent_job,
+            'student_id'    => $request->_token
         ]);
         session()->flash('Add', 'تم التسجيل بنجاح');
         return back();

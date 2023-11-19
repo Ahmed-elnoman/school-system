@@ -85,6 +85,7 @@
                                     <th class="border-bottom-0">#</th>
                                     <th class="border-bottom-0">اسم صف</th>
                                     <th class="border-bottom-0">المستوي</th>
+                                    <th class="border-bottom-0">عدد الطلاب في الصف</th>
                                     <th class="border-bottom-0">العمليات</th>
                                 </tr>
                             </thead>
@@ -100,6 +101,7 @@
                                         <td>{{ $i }}</td>
                                         <td>{{ $class->name }} </td>
                                         <td>{{ $class->level }}</td>
+                                        <td>{{ $class->student_count }} </td>
                                         <td>
                                             <div class="dropdown">
                                                 <button aria-expanded="false" aria-haspopup="true"
@@ -110,6 +112,7 @@
                                                         data-id="{{ $class->id }}"
                                                         data-class_name="{{ $class->name }}"
                                                         data-class_level="{{ $class->level }}"
+                                                        data-class_student_count="{{ $class->student_count }}"
                                                         data-toggle="modal" href="#editclassroom"><i
                                                             class="text-info fas fa-edit"></i>&nbsp;&nbsp;تعديل
                                                         الصف</a>
@@ -149,6 +152,10 @@
                             <label for="exampleInputEmail1">المستوي </label>
                             <input type="text" class="form-control" id="class_level" name="class_level">
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">اعدد الطلاب في الصف </label>
+                            <input type="text" class="form-control" id="class_level" name="student_count">
+                        </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">تاكيد</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
@@ -183,6 +190,10 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">المستوي </label>
                             <input type="text" class="form-control" id="class_level" name="class_level">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">اعدد الطلاب في الصف </label>
+                            <input type="text" class="form-control" id="class_student_count" name="student_count">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">تاكيد</button>
@@ -247,10 +258,12 @@
             var id = button.data('id')
             var class_name = button.data('class_name')
             var class_level = button.data('class_level')
+            var class_student_count = button.data('class_student_count')
             var modal = $(this)
             modal.find('.modal-body #id').val(id);
             modal.find('.modal-body #class_name').val(class_name);
             modal.find('.modal-body #class_level').val(class_level);
+            modal.find('.modal-body #class_student_count').val(class_student_count);
         })
     </script>
 
