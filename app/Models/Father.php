@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Parent extends Model
+class Father extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -19,6 +19,6 @@ class Parent extends Model
     ];
 
     public function students() {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class, 'id');
     }
 }

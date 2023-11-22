@@ -17,9 +17,8 @@ return new class extends Migration
             $table->string('gender');
             $table->string('address');
             $table->boolean('status')->default(0);
-            $table->integer('phone_parent');
             $table->string('medical_situation');
-            $table->date('join_date');
+            $table->string('medical_situation_file')->nullable();
             $table->foreignId('chargeFor_id')->constrained('charge_fors');
             $table->foreignId('classRoom_id')->constrained('class_rooms');
             $table->softDeletes();

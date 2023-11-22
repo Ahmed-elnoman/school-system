@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('charge_fors', function (Blueprint $table) {
+        Schema::create('an_exceptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->double('total_fees');
-            $table->double('first_payment');
-            $table->double('second_payment');
-            $table->foreignId('classRoom_id')->constrained('class_rooms');
+            $table->string('type');
+            $table->longText('description');
+            $table->double('discount_rate');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('charge_fors');
+        Schema::dropIfExists('an_exceptions');
     }
 };

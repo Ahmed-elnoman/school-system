@@ -21,7 +21,8 @@ class ClassRoomController extends Controller
     public function store(Request $request) {
         ClassRoom::create([
             'name'           => $request->class_name,
-            'student_count'  => $request->student_count,
+            'capacity'       => $request->capacity,
+            'student_count'  => 0,
             'level'          => $request->class_level
         ]);
         session()->flash('Add', 'تم اضافة بنجاح');

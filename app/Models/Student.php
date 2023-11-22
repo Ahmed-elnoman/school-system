@@ -11,14 +11,12 @@ class Student extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'full_name',
-        'email',
-        'password',
+        'name',
         'gender',
         'address',
-        'phone_parent',
         'level',
-        'join_date',
+        'medical_situation',
+        'medical_situation_file',
         'chargeFor_id',
         'classRoom_id'
     ];
@@ -40,6 +38,7 @@ class Student extends Model
     }
 
     public function parent() {
-        return $this->hasOne(Parent::class);
+        return $this->hasOne(Father::class);
     }
+
 }

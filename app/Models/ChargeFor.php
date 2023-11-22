@@ -10,7 +10,9 @@ class ChargeFor extends Model
     use HasFactory;
 
     protected $fillable = [
-        'price',
+        'total_fees',
+        'first_payment',
+        'second_payment',
         'classRoom_id'
     ];
 

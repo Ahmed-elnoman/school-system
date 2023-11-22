@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ChargeFor;
 use App\Models\ClassRoom;
+use App\Models\Father;
 use App\Models\Issue;
-use App\Models\Parent;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,10 +20,10 @@ class StudentController extends Controller
     }
 
     public function index() {
-        $students   = Student::all();
+        // $students   = Student::all();
         $classRoom  = ClassRoom::all();
 
-        return view('admin.content.students.index', compact('students', 'classRoom'));
+        return view('admin.content.students.index', compact('classRoom'));
     }
 
     public function getCharge($id) {
@@ -33,28 +33,103 @@ class StudentController extends Controller
         return response()->json($data);
     }
 
+    public function getStudentByClass(Request $request) {
+        $classRoom  = ClassRoom::all();
+
+        $class_id = $request->class_name;
+        $students = Student::where('classRoom_id', $class_id)->get();
+        return view('admin.content.students.index', compact('students', 'classRoom'));
+    }
+    public function create() {
+        $classRoom  = ClassRoom::all();
+        return view('admin.content.students.create', compact('classRoom'));
+    }
+
     public function store(Request $request) {
-        Student::create([
-            'name'               => $request->name,
-            'gender'             => $request->gender,
-            'address'            => $request->address,
-            'medical_situation'  => $request->medical_situation,
-            'phone_parent'       => $request->phone_parent,
-            'join_date'          => $request->join_date,
-            'chargeFor_id'       => $request->charge_for,
-            'classRoom_id'       => $request->class_room
-        ]);
-        Parent::create([
-            'name'          => $request->parent_name,
-            'email'         => $request->parent_email,
-            'password'      => Hash::make('1231234'),
-            'phone'         => $request->phone_parent,
-            'address'       => $request->parent_address,
-            'job'           => $request->parent_job,
-            'student_id'    => $request->_token
-        ]);
-        session()->flash('Add', 'تم التسجيل بنجاح');
-        return back();
+
+        if($request->file('medical_situation_file')){
+            $medical_situation_file = $request->file('medical_situation_file');
+            $rel_name               = $medical_situation_file->hashName();
+            $location = 'Image/Student/Medical_situation_file/';
+
+            $medical_situation_file->move($location , $rel_name);
+
+            $filePath = url('Image/Student/Medical_situation_file/', $rel_name);
+            $student = Student::create([
+                'name'                            => $request->name,
+                'gender'                          => $request->gender,
+                'address'                         => $request->address,
+                'medical_situation'               => $request->medical_situation,
+                'medical_situation_file'          => $filePath,
+                'chargeFor_id'                    => $request->charge_for,
+                'classRoom_id'                    => $request->class_room
+            ]);
+            Father::create([
+                'name'          => $request->parent_name,
+                'email'         => $request->parent_email,
+                'password'      => Hash::make('1231234'),
+                'phone'         => $request->phone_parent,
+                'address'       => $request->parent_address,
+                'job'           => $request->parent_job,
+                'student_id'    => $student->id
+            ]);
+            $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
+
+            $student_count       = ClassRoom::where('id', $request->class_room)->first('student_count');
+
+            if($student_count->student_count <= $capacity){
+                ClassRoom::where('id', $student->classRoom_id)->update([
+                    'student_count'  => $student_count->student_count + 1
+                ]);
+            }
+            else {
+                session()->flash('delete', 'الفصل ممتلا');
+                Student::destroy($student->id);
+                return back();
+            }
+            session()->flash('Add', 'تم التسجيل بنجاح');
+            return back();
+        }
+        else {
+
+            $student = Student::create([
+                'name'                            => $request->name,
+                'gender'                          => $request->gender,
+                'address'                         => $request->address,
+                'medical_situation'               => $request->medical_situation,
+                'Medical_situation_file'          => 'default',
+                'chargeFor_id'                    => $request->charge_for,
+                'classRoom_id'                    => $request->class_room
+            ]);
+            Father::create([
+                'name'          => $request->parent_name,
+                'email'         => $request->parent_email,
+                'password'      => Hash::make('1231234'),
+                'phone'         => $request->phone_parent,
+                'address'       => $request->parent_address,
+                'job'           => $request->parent_job,
+                'student_id'    => $student->id
+            ]);
+            $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
+
+            $student_count       = ClassRoom::where('id', $request->class_room)->first('student_count');
+
+            if($student_count->student_count <= $capacity){
+                ClassRoom::where('id', $student->classRoom_id)->update([
+                    'student_count'  => $student_count->student_count + 1
+                ]);
+            }
+            else {
+                session()->flash('delete', 'الفصل ممتلا');
+                Student::destroy($student->id);
+                return back();
+            }
+            session()->flash('Add', 'تم التسجيل بنجاح');
+            return back();
+        }
+
+
+
     }
 
     public function update(Request $request) {

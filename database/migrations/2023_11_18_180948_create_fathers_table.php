@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parents', function (Blueprint $table) {
+        Schema::create('fathers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('job');
             $table->foreignId('student_id')->constrained('students');
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 

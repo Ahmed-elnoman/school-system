@@ -75,6 +75,8 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     // student route
     Route::get('student/index', [StudentController::class, 'index'])->name('student.index');
     Route::get('student/class_room/get_charge/{id}', [StudentController::class, 'getCharge']);
+    Route::get('student/create', [StudentController::class, 'create'])->name('student.create');
+    Route::get('student/getStudentByClass', [StudentController::class, 'getStudentByClass'])->name('student.getStudentByClass');
     Route::post('student/store', [StudentController::class, 'store'])->name('student.store');
     Route::put('student/update', [StudentController::class, 'update'])->name('student.update');
     Route::post('student/issues', [StudentController::class, 'problem'])->name('student.problem');
