@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AnException extends Model
+class PaymentStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'type',
+        'total_fees',
+        'payment_status',
         'description',
-        'discount_rate'
+        'student_id'
     ];
 
-    public function students() {
-        return $this->hasMany(Student::class);
+    public function student() {
+        return $this->belongsTo(Student::class);
     }
 }

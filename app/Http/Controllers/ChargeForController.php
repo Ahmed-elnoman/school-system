@@ -35,11 +35,12 @@ class ChargeForController extends Controller
     }
 
     public function update(Request $request) {
-        return $request;
         $id   = $request->id;
         ChargeFor::where('id', $id)->update([
-            'price'   => $request->charge_price,
-            'classRoom_id'   => $request->charge_level
+            'classRoom_id'     => $request->charge_level,
+            'total_fees'       => $request->total_fees,
+            'first_payment'    => $request->first_payment,
+            'second_payment'   => $request->second_payment
         ]);
         session()->flash('edit', 'تم تعديل بنجاح');
         return back();

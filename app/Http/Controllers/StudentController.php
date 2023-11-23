@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnException;
 use App\Models\ChargeFor;
 use App\Models\ClassRoom;
 use App\Models\Father;
 use App\Models\Issue;
+use App\Models\PaymentStatus;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,11 +30,17 @@ class StudentController extends Controller
 
     public function getCharge($id) {
         $data['charge'] = ChargeFor::where("classRoom_id", $id)
-        ->get(['price', 'id']);
+        ->get(['id', 'total_fees', 'first_payment', 'second_payment']);
 
         return response()->json($data);
     }
 
+    public function an_exception($id) {
+        $data['charge'] = AnException::where('id', $id)
+        ->get(['id', 'discount_rate']);
+
+        return response()->json($data);
+    }
     public function getStudentByClass(Request $request) {
         $classRoom  = ClassRoom::all();
 
@@ -41,12 +49,14 @@ class StudentController extends Controller
         return view('admin.content.students.index', compact('students', 'classRoom'));
     }
     public function create() {
-        $classRoom  = ClassRoom::all();
-        return view('admin.content.students.create', compact('classRoom'));
+
+        $classRoom       = ClassRoom::all();
+        $an_exceptions   = AnException::all();
+
+        return view('admin.content.students.create', compact('classRoom', 'an_exceptions'));
     }
 
     public function store(Request $request) {
-
         if($request->file('medical_situation_file')){
             $medical_situation_file = $request->file('medical_situation_file');
             $rel_name               = $medical_situation_file->hashName();
@@ -62,7 +72,8 @@ class StudentController extends Controller
                 'medical_situation'               => $request->medical_situation,
                 'medical_situation_file'          => $filePath,
                 'chargeFor_id'                    => $request->charge_for,
-                'classRoom_id'                    => $request->class_room
+                'classRoom_id'                    => $request->class_room,
+                'an_exception_id'                 => $request->an_exception,
             ]);
             Father::create([
                 'name'          => $request->parent_name,
@@ -72,6 +83,12 @@ class StudentController extends Controller
                 'address'       => $request->parent_address,
                 'job'           => $request->parent_job,
                 'student_id'    => $student->id
+            ]);
+            PaymentStatus::create([
+                'total_fees'      => $request->total_fees,
+                'payment_status'  => $request->payment_status,
+                'description'     => $request->description,
+                'student_id'      => $student->id
             ]);
             $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
 
@@ -99,7 +116,8 @@ class StudentController extends Controller
                 'medical_situation'               => $request->medical_situation,
                 'Medical_situation_file'          => 'default',
                 'chargeFor_id'                    => $request->charge_for,
-                'classRoom_id'                    => $request->class_room
+                'classRoom_id'                    => $request->class_room,
+                'an_exception_id'                 => $request->an_exception
             ]);
             Father::create([
                 'name'          => $request->parent_name,
@@ -109,6 +127,12 @@ class StudentController extends Controller
                 'address'       => $request->parent_address,
                 'job'           => $request->parent_job,
                 'student_id'    => $student->id
+            ]);
+            PaymentStatus::create([
+                'total_fees'      => $request->total_fees,
+                'payment_status'  => $request->payment_status,
+                'description'     => $request->description,
+                'student_id'      => $student->id
             ]);
             $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
 
@@ -128,25 +152,81 @@ class StudentController extends Controller
             return back();
         }
 
-
-
     }
 
-    public function update(Request $request) {
-        $id  = $request->id;
-        Student::where('id', $id)->update([
-            'full_name'  => $request->name,
-            'email'      => $request->email,
-            'password'   => Hash::make('12341234'),
-            'gender'     => $request->gender,
-            'address'    => $request->address,
-            'phone_parent'  => $request->phone_parent,
-            'join_date'     => $request->join_date,
-            'chargeFor_id'  => $request->charge,
-            'classRoom_id'  => $request->room
-        ]);
-        session()->flash('edit', 'تم تعديل بنجاح');
-        return back();
+    public function edit($id) {
+
+        $classRoom       = ClassRoom::all();
+        $an_exceptions   = AnException::all();
+
+        $student = Student::find($id);
+        return view('admin.content.students.edit', compact('student', 'classRoom', 'an_exceptions'));
+    }
+
+
+    public function update(Request $request , $id) {
+        if($request->file('medical_situation_file')) {
+            $medical_situation_file = $request->file('medical_situation_file');
+            $rel_name               = $medical_situation_file->hashName();
+            $location = 'Image/Student/Medical_situation_file/' . $request->name . '/';
+
+
+            $medical_situation_file->move($location , $rel_name);
+            $filePath = url('Image/Student/Medical_situation_file/'. $request->name . '/', $rel_name);
+            Student::where('id', $id)->update([
+                'name'      => $request->name,
+                'gender'    => $request->gender,
+                'address'   => $request->address,
+                'medical_situation'       => $request->medical_situation,
+                'medical_situation_file'  => $filePath,
+                'chargeFor_id'            => $request->charge_for,
+                'classRoom_id'            => $request->class_room,
+                'an_exception_id'         => $request->an_exception
+            ]);
+
+            Father::where('student_id', $id)->update([
+                'name'          => $request->parent_name,
+                'email'         => $request->parent_email,
+                'password'      => Hash::make('1231234'),
+                'phone'         => $request->phone_parent,
+                'address'       => $request->parent_address,
+                'job'           => $request->parent_job
+            ]);
+            PaymentStatus::where('student_id', $id)->update([
+                'total_fees'      => $request->total_fees,
+                'payment_status'  => $request->payment_status,
+                'description'     => $request->description
+            ]);
+            session()->flash('edit', 'تم تعديل بنجاح');
+            return back();
+        }else {
+            $id  = $request->id;
+           Student::where('id', $id)->update([
+                'name'               => $request->name,
+                'gender'                          => $request->gender,
+                'address'                         => $request->address,
+                'medical_situation'               => $request->medical_situation,
+                'Medical_situation_file'          => 'default',
+                'chargeFor_id'                    => $request->charge_for,
+                'classRoom_id'                    => $request->class_room,
+                'an_exception_id'                 => $request->an_exception
+            ]);
+            Father::where('student_id', $id)->update([
+                'name'          => $request->parent_name,
+                'email'         => $request->parent_email,
+                'password'      => Hash::make('1231234'),
+                'phone'         => $request->phone_parent,
+                'address'       => $request->parent_address,
+                'job'           => $request->parent_job
+            ]);
+            PaymentStatus::where('student_id', $id)->update([
+                'total_fees'      => $request->total_fees,
+                'payment_status'  => $request->payment_status,
+                'description'     => $request->description
+            ]);
+            session()->flash('edit', 'تم تعديل بنجاح');
+            return back();
+        }
     }
 
     public function problem(Request $request) {

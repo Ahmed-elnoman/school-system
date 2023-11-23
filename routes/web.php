@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AnExceptionController;
 use App\Http\Controllers\ChargeForController;
 use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\DepartmentController;
@@ -72,13 +73,22 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('charge_for/store', [ChargeForController::class, 'store'])->name('charge.store');
     Route::put('charge_for/update', [ChargeForController::class, 'update'])->name('charge.update');
 
+    // an_exception routes
+    Route::post('an_exception/store', [AnExceptionController::class, 'store'])->name('an_exception.store');
+    Route::put('an_exception/update', [AnExceptionController::class, 'update'])->name('an_exception.update');
+    Route::delete('an_exception/delete', [AnExceptionController::class, 'delete'])->name('an_exception.delete');
+
     // student route
     Route::get('student/index', [StudentController::class, 'index'])->name('student.index');
     Route::get('student/class_room/get_charge/{id}', [StudentController::class, 'getCharge']);
+    Route::get('student/edit/class_room/get_charge/{id}', [StudentController::class, 'getCharge']);
+    Route::get('student/an_exception/get_an_exception/{id}', [StudentController::class, 'an_exception']);
+    Route::get('student/edit/an_exception/get_an_exception/{id}', [StudentController::class, 'an_exception']);
     Route::get('student/create', [StudentController::class, 'create'])->name('student.create');
     Route::get('student/getStudentByClass', [StudentController::class, 'getStudentByClass'])->name('student.getStudentByClass');
     Route::post('student/store', [StudentController::class, 'store'])->name('student.store');
-    Route::put('student/update', [StudentController::class, 'update'])->name('student.update');
+    Route::get('student/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
+    Route::put('student/update/{id}', [StudentController::class, 'update'])->name('student.update');
     Route::post('student/issues', [StudentController::class, 'problem'])->name('student.problem');
     Route::delete('student/softDelete', [StudentController::class, 'softDelete'])->name('student.softDelete');
     Route::get('student/Trashed/get', [StudentController::class, 'getTrashed'])->name('student.getTrashed');

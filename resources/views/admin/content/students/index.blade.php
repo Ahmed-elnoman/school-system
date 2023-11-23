@@ -86,7 +86,6 @@
     <!-- row -->
     <div class="row">
         <!--div-->
-
         <div class="col-xl-12">
             <div class="card mg-b-20">
                 <div class="card-header pb-3">
@@ -104,26 +103,26 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             @if (isset($students))
-                            <table id="example1" class="table key-buttons text-md-nowrap"
-                                data-page-length='50'style="text-align: center">
-                                <thead>
-                                    <tr>
-                                        <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">اسم التلميذ</th>
-                                        <th class="border-bottom-0">اسم الصف</th>
-                                        <th class="border-bottom-0">العنوان</th>
-                                        <th class="border-bottom-0">الجنس</th>
-                                        <th class="border-bottom-0">هاتف ولي الامر</th>
-                                        <th class="border-bottom-0">السلوك</th>
-                                        <th class="border-bottom-0">الرسوم</th>
-                                        <th class="border-bottom-0">تاريخ الانضمام</th>
-                                        <th class="border-bottom-0">العمليات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i = 0;
-                                    @endphp
+                                <table id="example1" class="table key-buttons text-md-nowrap"
+                                    data-page-length='50'style="text-align: center">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-bottom-0">#</th>
+                                            <th class="border-bottom-0">اسم التلميذ</th>
+                                            <th class="border-bottom-0">اسم الصف</th>
+                                            <th class="border-bottom-0">العنوان</th>
+                                            <th class="border-bottom-0">الجنس</th>
+                                            <th class="border-bottom-0">هاتف ولي الامر</th>
+                                            <th class="border-bottom-0">السلوك</th>
+                                            {{-- <th class="border-bottom-0">الرسوم</th> --}}
+                                            <th class="border-bottom-0">تاريخ الانضمام</th>
+                                            <th class="border-bottom-0">العمليات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $i = 0;
+                                        @endphp
 
                                         @foreach ($students as $student)
                                             @php
@@ -145,7 +144,7 @@
                                                         <span class="text-danger">صحب فصل</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $student->chargeFar->price }}</td>
+                                                {{-- <td>{{  }}</td> --}}
                                                 <td>{{ $student->created_at }}</td>
                                                 <td>
                                                     <div class="dropdown">
@@ -154,27 +153,32 @@
                                                             type="button">العمليات<i
                                                                 class="fas fa-caret-down ml-1"></i></button>
                                                         <div class="dropdown-menu tx-13">
-                                                            <a class="dropdown-item" data-effect="effect-scale"
-                                                                data-id="{{ $student->id }}"
-                                                                data-student_name="{{ $student->name }}"
-                                                                {{-- data-student_email="{{ $student->email }}" --}}
-                                                                data-student_address="{{ $student->address }}"
-                                                                data-student_gender="{{ $student->gender }}"
-                                                                data-student_phone_parent="{{ $student->phone_parent }}"
-                                                                data-student_join_date="{{ $student->join_date }}"
-                                                                data-toggle="modal" href="#editStudent"><i
+                                                            <a class="dropdown-item"
+                                                            href="{{route('student.edit', $student->id)}}"><i
                                                                     class="text-info fas fa-edit"></i>&nbsp;&nbsp;تعديل
                                                                 بيانات الطلاب</a>
                                                             <a class="dropdown-item" href="#"
                                                                 data-student_id="{{ $student->id }}" data-toggle="modal"
                                                                 data-target="#soft"><i
-                                                                    class="text-danger fas fa-sign-out"></i>&nbsp;&nbsp;فصل
+                                                                    class="text-danger fas fa-arrow-left"></i>&nbsp;&nbsp;فصل
                                                                 الطلاب</a>
                                                             <a class="dropdown-item" href="#problme"
                                                                 data-student_id="{{ $student->id }}" data-toggle="modal"
                                                                 data-target="#problme"><i
-                                                                    class="text-warning fas fa-balance-scale"></i>&nbsp;&nbsp;انزار
+                                                                    class="text-danger fas fa-exclamation"></i>&nbsp;&nbsp;انزار
                                                                 الطلاب</a>
+                                                            <a class="dropdown-item" href="#problme"
+                                                                data-student_id="{{ $student->id }}"
+                                                                data-student_name="{{ $student->name }} {{ $student->parent->name }}"
+                                                                data-student_total="{{$student->chargeFar->total_fees}}"
+                                                                data-first_payment="{{$student->chargeFar->first_payment}}"
+                                                                data-second_payment="{{$student->chargeFar->second_payment}}"
+                                                                data-total_fees="{{$student->payment_status->total_fees}}"
+                                                                data-payment_status="{{$student->payment_status->payment_status}}"
+                                                                data-toggle="modal"
+                                                                data-target="#fees"><i
+                                                                    class="text-warning fas fa-folder"></i>&nbsp;&nbsp;الملف
+                                                                المالي</a>
                                                             <a class="dropdown-item" href="#"
                                                                 data-student_id="{{ $student->id }}"
                                                                 data-parent_name="{{ $student->parent->name }}"
@@ -182,16 +186,25 @@
                                                                 data-parent_address="{{ $student->parent->address }}"
                                                                 data-parent_job="{{ $student->parent->job }}"
                                                                 data-toggle="modal" data-target="#parent"><i
-                                                                    class="text-danger fas fa-sign-out"></i>&nbsp;&nbsp;تفاصيل
+                                                                    class="text-success fas fa-address-card"></i>&nbsp;&nbsp;تفاصيل
                                                                 ولي الامر </a>
+                                                            <a class="dropdown-item" href="#"
+                                                                data-student_id="{{ $student->id }}"
+                                                                data-student_name="{{ $student->name }} {{ $student->parent->name }}"
+                                                                data-medical_situation="{{ $student->medical_situation }}"
+                                                                data-medical_situation_file="{{ $student->medical_situation_file }}"
+                                                                data-toggle="modal" data-target="#medicalSituation"><i
+                                                                    class="text-danger fas fa-heartbeat"></i>&nbsp;&nbsp;الملف
+                                                                الطبي
+                                                            </a>
                                                         </div>
                                                     </div>
 
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    @endif
-                                </tbody>
+                            @endif
+                            </tbody>
                             </table>
                         </div>
                     </div>
@@ -200,157 +213,7 @@
             <!--/div-->
         </div>
 
-        {{-- start add modal  --}}
-        {{-- <div class="modal" id="addteacher">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header">
-                        <h6 class="modal-title">اضافة تلميذ</h6><button aria-label="Close" class="close"
-                            data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('student.store') }}" method="post" autocomplete="off">
-                            @csrf
 
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">اسم التلميذ</label>
-                                <input type="text" class="form-control" id="student_name" name="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">اسم ولي الامر</label>
-                                <input type="text" class="form-control" id="student_name" name="parent_name">
-                            </div>
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الجنس</label>
-                            <select name="gender" id="gander" class="form-control" required>
-                                <option value="" selected disabled> --حدد الجنس--</option>
-                                <option value="ذكر">ذكر</option>
-                                <option value="انثي">انثي</option>
-                            </select>
-                            <div class="form-group mt-1">
-                                <label for="exampleInputEmail1">العنوان التلميذ</label>
-                                <input type="test" class="form-control" id="section_name" name="address">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">الحالة الصحية لتلميذ</label>
-                                <input type="test" class="form-control" id="section_name" name="medical_situation">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">رقم هاتف ولي الامر</label>
-                                <input type="test" class="form-control" id="section_name" name="phone_parent">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">تاريخ الانضمام</label>
-                                <input type="date" class="form-control" id="section_name" name="join_date">
-                            </div>
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">اسم الصف</label>
-                            <select name="class_room" id="class_room" class="form-control" required>
-                                <option value="" selected disabled> --حدد الصف--</option>
-                                @foreach ($classRoom as $room)
-                                    <option value={{ $room->id }}>{{ $room->name }}</option>
-                                @endforeach
-
-                            </select>
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الرسم</label>
-                            <select name="charge_for" id="charge_for" class="form-control" required>
-
-                            </select>
-
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">العنوان ولي الامر</label>
-                                <input type="test" class="form-control" id="section_name" name="parent_address">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">البريد الالكتروني ولي الامر</label>
-                                <input type="email" class="form-control" id="student_email" name="parent_email">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">وظيفة ولي الامر</label>
-                                <input type="test" class="form-control" id="section_name" name="parent_job">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">تاكيد</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- End Basic modal -->
-
-
-        </div> --}}
-        {{-- end add modal  --}}
-
-        {{-- statr edit student modal  --}}
-        <div class="modal" id="editStudent">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header">
-                        <h6 class="modal-title">تعديل بيانات التلميذ</h6><button aria-label="Close" class="close"
-                            data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('student.update') }}" method="post" autocomplete="off">
-                            @csrf
-                            @method('put')
-
-                            <input type="hidden" name="id" id="id" value="">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">اسم التلميذ</label>
-                                <input type="text" class="form-control" readonly id="student_name" name="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">البريد الالكتروني</label>
-                                <input type="email" class="form-control" id="student_email" name="email">
-                            </div>
-                            <div class="form-group">
-                                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الجنس</label>
-                                <select name="gender" id="gander" class="form-control" required>
-                                    <option value="" selected disabled> --حدد الجنس--</option>
-                                    <option value="ذكر">ذكر</option>
-                                    <option value="انثي">انثي</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">العنوان </label>
-                                <input type="test" class="form-control" id="student_address" name="address">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">رقم هاتف ولي الامر</label>
-                                <input type="test" class="form-control" id="student_phone_parent"
-                                    name="phone_parent">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">تاريخ الانضمام</label>
-                                <input type="date" class="form-control" readonly id="student_join_date"
-                                    name="join_date">
-                            </div>
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">اسم الصف</label>
-                            <select name="room" id="room" class="form-control" required>
-                                <option value="" selected disabled> --حدد الصف--</option>
-                                @foreach ($classRoom as $room)
-                                    <option value={{ $room->id }}>{{ $room->name }}</option>
-                                @endforeach
-
-                            </select>
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الرسم</label>
-                            <select name="charge" id="charge" class="form-control" required>
-
-                            </select>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">تاكيد</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- End Basic modal -->
-
-
-        </div>
-
-        {{-- end edit modal --}}
 
         {{-- start parents modal  --}}
         <div class="modal fade" id="soft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -448,6 +311,76 @@
         </div>
         {{-- end freeze modal --}}
 
+        {{-- start fees modal  --}}
+        <div class="modal fade" id="fees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">الملف المالي للتلميذ</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="student_id" value="">
+                        <p class="invoice-info-row"><span>اسم الطالب</span>
+                            <span id="student_name"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>الدفعة الاولي</span>
+                            <span id="first_payment"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>الدفعة الثانية</span>
+                            <span id="second_payment"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>اجمالي الرسوم</span>
+                            <span id="chargeFor_total" class="tx-info"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>ما تم دفعة</span>
+                            <span id="total_fees"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>حالة دفعة</span>
+                            <span id="payment_status"></span>
+                        </p>
+                        <p class="invoice-info-row mb-3"><span></span>
+                            {{-- <span id="medical_situation_file"></span> --}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end fees modal  --}}
+
+        {{-- start medical_situation modal  --}}
+        <div class="modal fade" id="medicalSituation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">الحالة الصحية لتلميذ</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="student_id" value="">
+                        <p class="invoice-info-row"><span>اسم الطالب</span>
+                            <span id="student_name"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>الحالة الصحية</span>
+                            <span id="medical_situation"></span>
+                        </p>
+                        <p class="invoice-info-row"><span>الملف الطبي</span>
+                            <span id="medical_situation_file"></span>
+                        </p>
+                        <p class="invoice-info-row mb-3"><span></span>
+                            {{-- <span id="medical_situation_file"></span> --}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end medical_situation modal  --}}
     </div>
     <!-- row closed -->
     </div>
@@ -512,6 +445,40 @@
         })
     </script>
     <script>
+        $('#fees').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var student_id = button.data('student_id')
+            var student_name    = button.data('student_name')
+            var student_total   = button.data('student_total')
+            var first_payment   = button.data('first_payment')
+            var second_payment  = button.data('second_payment')
+            var total_fees      = button.data('total_fees')
+            var payment_status  = button.data('payment_status')
+            var modal = $(this)
+            modal.find('.modal-body #student_id').val(student_id);
+            modal.find('.modal-body #student_name').html(student_name);
+            modal.find('.modal-body #chargeFor_total').html(student_total);
+            modal.find('.modal-body #first_payment').html(first_payment);
+            modal.find('.modal-body #second_payment').html(second_payment);
+            modal.find('.modal-body #total_fees').html(total_fees);
+            modal.find('.modal-body #payment_status').html(payment_status);
+        })
+    </script>
+    <script>
+        $('#medicalSituation').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var student_id = button.data('student_id')
+            var student_name = button.data('student_name')
+            var medical_situation = button.data('medical_situation')
+            var medical_situation_file = button.data('medical_situation_file')
+            var modal = $(this)
+            modal.find('.modal-body #student_id').val(student_id);
+            modal.find('.modal-body #student_name').html(student_name);
+            modal.find('.modal-body #medical_situation').html(medical_situation);
+            modal.find('.modal-body #medical_situation_file').html(medical_situation_file);
+        })
+    </script>
+    <script>
         $('#class_room').on('change', function() {
             var idState = this.value;
             $('#charge_for').html('');
@@ -546,7 +513,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         $('#editStudent').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var id = button.data('id')
@@ -569,7 +536,7 @@
             // modal.find('.modal-body #charge_for').val(charge_for);
             modal.find('.modal-body #student_join_date').val(student_join_date);
         })
-    </script>
+    </script> --}}
 
 
 

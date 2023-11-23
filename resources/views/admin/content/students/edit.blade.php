@@ -19,8 +19,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الطلاب</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                    اضافة طالب</span>
+                <a href="{{route('student.index')}}" class="content-title mb-0 my-auto tx-dark tx-lg">الطلاب</a><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                    تعديل طالب</span>
             </div>
         </div>
     </div>
@@ -28,9 +28,9 @@
 @endsection
 @section('content')
 
-    @if (session()->has('Add'))
+    @if (session()->has('edit'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session()->get('Add') }}</strong>
+            <strong>{{ session()->get('edit') }}</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -51,22 +51,23 @@
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('student.store') }}" method="post" autocomplete="off"
+                    <form action="{{ route('student.update', $student->id) }}" method="post" autocomplete="off"
                         enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         {{-- 1 --}}
                         <div class="row">
                             <div class="col-2">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">اسم التلميذ</label>
-                                    <input type="text" class="form-control" id="student_name" name="name">
+                                    <input type="text" class="form-control" id="student_name" value="{{$student->name}}" name="name">
                                 </div>
                             </div>
 
                             <div class="col-7">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">اسم ولي الامر</label>
-                                    <input type="text" class="form-control" id="student_name" name="parent_name">
+                                    <input type="text" class="form-control" id="student_name" value="{{$student->parent->name}}" name="parent_name">
                                 </div>
                             </div>
 
@@ -86,21 +87,21 @@
                             <div class="col-6">
                                 <div class="form-group mt-1">
                                     <label for="exampleInputEmail1">العنوان التلميذ</label>
-                                    <input type="test" class="form-control" id="section_name" name="address">
+                                    <input type="test" class="form-control" id="section_name" value="{{$student->address}}" name="address">
                                 </div>
                             </div>
 
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">رقم هاتف ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="phone_parent">
+                                    <input type="test" class="form-control" id="section_name" value="{{$student->parent->phone}}" name="phone_parent">
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">الحالة الصحية لتلميذ</label>
-                                    <textarea class="form-control" id="section_name" name="medical_situation" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" id="section_name" name="medical_situation" rows="5">{{$student->medical_situation}}</textarea>
                                 </div>
                             </div>
                             <p class="text-danger">* اذا يوجد مستند للحالة الصحية للتلميذ </p>
@@ -115,19 +116,19 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">البريد الالكتروني ولي الامر</label>
-                                    <input type="email" class="form-control" id="student_email" name="parent_email">
+                                    <input type="email" class="form-control" id="student_email" value="{{$student->parent->email }}" name="parent_email">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group mt-1">
                                     <label for="exampleInputEmail1">العنوان ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="parent_address">
+                                    <input type="test" class="form-control" id="section_name" value="{{$student->parent->address }}" name="parent_address">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">وظيفة ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="parent_job">
+                                    <input type="test" class="form-control" id="section_name" value="{{$student->parent->job }}" name="parent_job">
                                 </div>
                             </div>
                         </div>
@@ -189,21 +190,21 @@
                             </div>
                             <div class="col-12 m-2">
                                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الرسوم النهاية</label>
-                                <input type="number" name="total_fees" class="form-control" id="">
+                                <input type="number" name="total_fees" class="form-control" value="{{$student->payment_status->total_fees}}" id="">
                             </div>
                             <div class="col-12 m-2">
                                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">حالة الدفعة</label>
-                                <input type="text" name="payment_status" class="form-control" id="">
+                                <input type="text" name="payment_status" class="form-control" value="{{$student->payment_status->payment_status}}" id="">
                             </div>
                             <div class="col-12 m-2">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">السبب <span class="text-danger tx-sm">اذا كان الدفع غير مكتمل</span></label>
-                                    <textarea class="form-control" id="section_name" name="description" cols="30" rows="5"></textarea>
+                                    <textarea class="form-control" id="section_name" name="description" cols="30" rows="5">{{$student->payment_status->description}}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">حفظ البيانات</button>
+                            <button type="submit" class="btn btn-primary">تحديث البيانات</button>
                         </div>
 
 
