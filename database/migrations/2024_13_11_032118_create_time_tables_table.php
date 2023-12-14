@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('time_tables', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('day');
+            $table->string('day');
             $table->time('time');
             $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('classRoom_id')->constrained('class_rooms')->onDelete('cascade')->onUpdate('cascade');

@@ -16,10 +16,10 @@
                 <a class="open-toggle" href="#"><i class="header-icon fe fe-align-left"></i></a>
                 <a class="close-toggle" href="#"><i class="header-icons fe fe-x"></i></a>
             </div>
-            <div class="main-header-center mr-3 d-sm-none d-md-none d-lg-block">
+            {{-- <div class="main-header-center mr-3 d-sm-none d-md-none d-lg-block">
                 <input class="form-control" placeholder="Search for anything..." type="search"> <button class="btn"><i
                         class="fas fa-search d-none d-md-block"></i></button>
-            </div>
+            </div> --}}
         </div>
         <div class="main-header-right">
 
@@ -202,21 +202,21 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="dropdown-item" href=""><i class="bx bx-user-circle"></i>Profile</a>
-                        <a class="dropdown-item" href=""><i class="bx bx-cog"></i> Edit Profile</a>
+                        <a class="dropdown-item" href="{{route('profile', auth()->user()->id)}}"><i class="bx bx-user-circle"></i>الصفحة الشخصية</a>
+                        {{-- <a class="dropdown-item" href=""><i class="bx bx-cog"></i> Edit Profile</a> --}}
                         <a class="dropdown-item" href=""><i class="bx bxs-inbox"></i>Inbox</a>
                         <a class="dropdown-item" href=""><i class="bx bx-envelope"></i>Messages</a>
                         <a class="dropdown-item" href=""><i class="bx bx-slider-alt"></i> Account Settings</a>
-                        {{-- <a class="dropdown-item" href="{{ route('logout') }}"
+                        <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i
-                                class="bx bx-log-out"></i>تسجيل خروج</a> --}}
-                        {{-- <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                class="bx bx-log-out"></i>تسجيل خروج</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                        </form> --}}
+                        </form>
 
                     </div>
                 </div>
-                <div class="dropdown main-header-message right-toggle">
+                {{-- <div class="dropdown main-header-message right-toggle">
                     <a class="nav-link pr-0" data-toggle="sidebar-left" data-target=".sidebar-left">
                         <svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -226,7 +226,7 @@
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

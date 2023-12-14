@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,5 +31,15 @@ class UserController extends Controller
     }
     public function dashboard() {
         return view('admin.dashboard');
+    }
+
+    public function logout() {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+
+    public function profile($id) {
+       $user = User::find($id);
+        return view('admin.auth.profile', compact('user'));
     }
 }

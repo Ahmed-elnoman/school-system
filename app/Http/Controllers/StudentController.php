@@ -57,6 +57,46 @@ class StudentController extends Controller
     }
 
     public function store(Request $request) {
+        $request->validate([
+            'name'                     => 'required|string',
+            'parent_name'              => 'required|string',
+            'address'                  => 'required|string',
+            'phone_parent'             => 'required|numeric|min:10',
+            'good'                     => 'string',
+            'medical_situation_file'   => 'file',
+            'parent_email'             => 'required|email',
+            'parent_address'           => 'required|string',
+            'parent_job'               => 'required|string',
+            'total_fees'               => 'required|numeric',
+            'payment_status'           => 'required'
+        ], [
+            'name.required'            => 'الارجاء ادخال اسم التلميذ',
+            'name.string'              => 'يجب ان يكون اسم التلميذ من نوع نص',
+
+            'parent_name.required'     => 'الارجاء ادخال اسم ولي امر التلميذ',
+            'parent_name.string'       => 'يجب ان يكون اسم ولي امر من نوع نص',
+
+            'address.required'         => 'الارجاء ادخال عنوان التلميذ ',
+            'address.string'           => 'عنوان التلميذ يجب ان يكون من نوع نص',
+
+            'phone_parent.required'    => 'الارجاء ادخال رقم ولي امر التلميذ ',
+            'phone_parent.min'         => 'الرقم ناقص يجب ان يكون عشرة ارقام',
+
+            'parent_email.required'    => 'الارجاء ادخال البريد الالكتروني ',
+
+            'parent_address.required'  => 'الارجاء ادخال عنوان ولي امر التلميذ ',
+            'parent_address.string'    => 'عنوان ولي امر يجب ان يكون من نوع نص',
+
+            'parent_job.required'      => 'الارجاء ادخال الامسمي الوظيفي لولي امر التلميذ',
+
+            'total_fees'               => 'الارجاء ادخال الرسوم النهاية',
+
+             'payment_status'          => 'الارجاء ادخال حالة الدفعة',
+
+        ]);
+
+
+        $ifGood = $request->good;
         if($request->file('medical_situation_file')){
             $medical_situation_file = $request->file('medical_situation_file');
             $rel_name               = $medical_situation_file->hashName();
@@ -90,35 +130,36 @@ class StudentController extends Controller
                 'description'     => $request->description,
                 'student_id'      => $student->id
             ]);
-            $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
 
-            $student_count       = ClassRoom::where('id', $request->class_room)->first('student_count');
-
-            if($student_count->student_count <= $capacity){
-                ClassRoom::where('id', $student->classRoom_id)->update([
-                    'student_count'  => $student_count->student_count + 1
-                ]);
-            }
-            else {
-                session()->flash('delete', 'الفصل ممتلا');
-                Student::destroy($student->id);
-                return back();
-            }
             session()->flash('Add', 'تم التسجيل بنجاح');
             return back();
         }
         else {
 
-            $student = Student::create([
-                'name'                            => $request->name,
-                'gender'                          => $request->gender,
-                'address'                         => $request->address,
-                'medical_situation'               => $request->medical_situation,
-                'Medical_situation_file'          => 'default',
-                'chargeFor_id'                    => $request->charge_for,
-                'classRoom_id'                    => $request->class_room,
-                'an_exception_id'                 => $request->an_exception
-            ]);
+            if($request->an_exception){
+                $student = Student::create([
+                    'name'                            => $request->name,
+                    'gender'                          => $request->gender,
+                    'address'                         => $request->address,
+                    'medical_situation'               => $ifGood,
+                    'Medical_situation_file'          => 'default',
+                    'chargeFor_id'                    => $request->charge_for,
+                    'classRoom_id'                    => $request->class_room,
+                    'an_exception_id'                 => $request->an_exception
+                ]);
+            }else{
+
+                $student = Student::create([
+                    'name'                            => $request->name,
+                    'gender'                          => $request->gender,
+                    'address'                         => $request->address,
+                    'medical_situation'               => $ifGood,
+                    'Medical_situation_file'          => 'default',
+                    'chargeFor_id'                    => $request->charge_for,
+                    'classRoom_id'                    => $request->class_room
+                ]);
+            }
+
             Father::create([
                 'name'          => $request->parent_name,
                 'email'         => $request->parent_email,
@@ -134,20 +175,7 @@ class StudentController extends Controller
                 'description'     => $request->description,
                 'student_id'      => $student->id
             ]);
-            $capacity            = ClassRoom::where('id', $student->classRoom_id)->count('capacity');
 
-            $student_count       = ClassRoom::where('id', $request->class_room)->first('student_count');
-
-            if($student_count->student_count <= $capacity){
-                ClassRoom::where('id', $student->classRoom_id)->update([
-                    'student_count'  => $student_count->student_count + 1
-                ]);
-            }
-            else {
-                session()->flash('delete', 'الفصل ممتلا');
-                Student::destroy($student->id);
-                return back();
-            }
             session()->flash('Add', 'تم التسجيل بنجاح');
             return back();
         }
@@ -165,6 +193,46 @@ class StudentController extends Controller
 
 
     public function update(Request $request , $id) {
+
+        $request->validate([
+            'name'                     => 'required|string',
+            'parent_name'              => 'required|string',
+            'address'                  => 'required|string',
+            'phone_parent'             => 'required|numeric|min:10',
+            'good'                     => 'string',
+            'medical_situation_file'   => 'file',
+            'parent_email'             => 'required|email',
+            'parent_address'           => 'required|string',
+            'parent_job'               => 'required|string',
+            'total_fees'               => 'required|numeric',
+            'payment_status'           => 'required'
+        ], [
+            'name.required'            => 'الارجاء ادخال اسم التلميذ',
+            'name.string'              => 'يجب ان يكون اسم التلميذ من نوع نص',
+
+            'parent_name.required'     => 'الارجاء ادخال اسم ولي امر التلميذ',
+            'parent_name.string'       => 'يجب ان يكون اسم ولي امر من نوع نص',
+
+            'address.required'         => 'الارجاء ادخال عنوان التلميذ ',
+            'address.string'           => 'عنوان التلميذ يجب ان يكون من نوع نص',
+
+            'phone_parent.required'    => 'الارجاء ادخال رقم ولي امر التلميذ ',
+            'phone_parent.min'         => 'الرقم ناقص يجب ان يكون عشرة ارقام',
+
+            'parent_email.required'    => 'الارجاء ادخال البريد الالكتروني ',
+
+            'parent_address.required'  => 'الارجاء ادخال عنوان ولي امر التلميذ ',
+            'parent_address.string'    => 'عنوان ولي امر يجب ان يكون من نوع نص',
+
+            'parent_job.required'      => 'الارجاء ادخال الامسمي الوظيفي لولي امر التلميذ',
+
+            'total_fees'               => 'الارجاء ادخال الرسوم النهاية',
+
+             'payment_status'          => 'الارجاء ادخال حالة الدفعة',
+
+        ]);
+
+        $ifGood = $request->good;
         if($request->file('medical_situation_file')) {
             $medical_situation_file = $request->file('medical_situation_file');
             $rel_name               = $medical_situation_file->hashName();
@@ -174,14 +242,15 @@ class StudentController extends Controller
             $medical_situation_file->move($location , $rel_name);
             $filePath = url('Image/Student/Medical_situation_file/'. $request->name . '/', $rel_name);
             Student::where('id', $id)->update([
-                'name'      => $request->name,
-                'gender'    => $request->gender,
-                'address'   => $request->address,
-                'medical_situation'       => $request->medical_situation,
-                'medical_situation_file'  => $filePath,
-                'chargeFor_id'            => $request->charge_for,
-                'classRoom_id'            => $request->class_room,
-                'an_exception_id'         => $request->an_exception
+                'name'                            => $request->name,
+                'gender'                          => $request->gender,
+                'address'                         => $request->address,
+                'medical_situation'               => $request->medical_situation,
+                'medical_situation_file'          => $filePath,
+                'chargeFor_id'                    => $request->charge_for,
+                'classRoom_id'                    => $request->class_room,
+                'an_exception_id'                 => $request->an_exception,
+
             ]);
 
             Father::where('student_id', $id)->update([
@@ -195,22 +264,34 @@ class StudentController extends Controller
             PaymentStatus::where('student_id', $id)->update([
                 'total_fees'      => $request->total_fees,
                 'payment_status'  => $request->payment_status,
-                'description'     => $request->description
+                'description'     => $request->description,
             ]);
             session()->flash('edit', 'تم تعديل بنجاح');
             return back();
         }else {
             $id  = $request->id;
-           Student::where('id', $id)->update([
-                'name'               => $request->name,
-                'gender'                          => $request->gender,
-                'address'                         => $request->address,
-                'medical_situation'               => $request->medical_situation,
-                'Medical_situation_file'          => 'default',
-                'chargeFor_id'                    => $request->charge_for,
-                'classRoom_id'                    => $request->class_room,
-                'an_exception_id'                 => $request->an_exception
-            ]);
+            if($request->an_exception){
+                Student::where('id', $id)->update([
+                    'name'                            => $request->name,
+                    'gender'                          => $request->gender,
+                    'address'                         => $request->address,
+                    'medical_situation'               => $ifGood,
+                    'Medical_situation_file'          => 'default',
+                    'chargeFor_id'                    => $request->charge_for,
+                    'classRoom_id'                    => $request->class_room
+                ]);
+            }else{
+                Student::where('id', $id)->update([
+                    'name'                            => $request->name,
+                    'gender'                          => $request->gender,
+                    'address'                         => $request->address,
+                    'medical_situation'               => $ifGood,
+                    'Medical_situation_file'          => 'default',
+                    'chargeFor_id'                    => $request->charge_for,
+                    'classRoom_id'                    => $request->class_room
+                ]);
+            }
+
             Father::where('student_id', $id)->update([
                 'name'          => $request->parent_name,
                 'email'         => $request->parent_email,

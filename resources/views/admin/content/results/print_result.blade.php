@@ -48,7 +48,7 @@
                                 @endforeach
                                 <label class="tx-gray-600">معلومات التلميذ</label>
                                 <p class="invoice-info-row"><span>اسم التلميذ</span>
-                                    <span>{{ $result->student->full_name }}</span>
+                                    <span>{{ $result->student->name }} {{ $result->student->parent->name }}</span>
                                 </p>
                                 <p class="invoice-info-row"><span>المستوي</span>
                                     <span>{{ $result->student->classRoom->level }}</span>
@@ -70,30 +70,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $i = 0;
+                                    @endphp
                                     @foreach ($student_result as $student)
+                                        @php
+                                            $i++;
+                                        @endphp
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{ $i }}</td>
                                             <td class="tx-12">{{ $student->subject->name }}</td>
-                                            <td class="tx-center">{{ $student->marks }}</td>
-                                            <td hidden>{{ $fR = $student->marks }}</td>
+                                            <td class="tx-center" id="marks">{{ $student->marks }}</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <td class="tx-right tx-uppercase tx-bold tx-inverse">الدرجة النهاية</td>
                                         <td class="tx-right" colspan="2">
-                                            <h4 class=" tx-bold">
-                                                @if ($student->marks > 87)
-                                                    <span class="tx-success">ممتاز</span>
-                                                @elseif ($student->marks > 77)
-                                                    <span class="tx-success">جيد جد</span>
-                                                @elseif ($student->marks > 60)
-                                                    <span class="tx-info">جيد</span>
-                                                @elseif ($student->marks > 50)
-                                                    <span class="tx-warning">مقبول</span>
-                                                @elseif ($student->marks < 50)
-                                                    <span class="tx-danger">راسب</span>
-                                                @endif
-                                                <h4>
+                                            <h5 class=" tx-bold" id="total_mark">
+                                                <h5>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -122,6 +116,17 @@
 
 
     <script type="text/javascript">
+        var marks = document.querySelectorAll('td#marks.tx-center');
+        let global_mark = 0;
+        for (i = 0; i <= marks.length; i++) {
+            let mark = marks[i].innerHTML;
+            global_mark += Number(mark);
+            total_mark = global_mark / marks.length;
+            var floor_total_marks = Math.floor(total_mark)
+
+            document.getElementById('total_mark').innerHTML = floor_total_marks + '%'
+        }
+
         function printDiv() {
             var printContents = document.getElementById('print').innerHTML;
             var originalContents = document.body.innerHTML;

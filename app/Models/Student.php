@@ -14,7 +14,7 @@ class Student extends Model
         'name',
         'gender',
         'address',
-        'level',
+        'status',
         'medical_situation',
         'medical_situation_file',
         'chargeFor_id',
@@ -49,9 +49,9 @@ class Student extends Model
         return $this->hasOne(Father::class);
     }
 
-    // public function getCreatedAtColumn()
+    // public function getCreatedAtAttribute($date)
     // {
-    //     return date('Y-m-d');
+    //     return date('d/Y/M');
     // }
 
 }

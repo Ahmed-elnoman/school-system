@@ -72,8 +72,8 @@
                     <a data-effect="effect-scale" data-toggle="modal" href="#addaccount"
                         class="modal-effect btn btn-sm btn-primary" style="color:white"><i class="fas fa-plus"></i>&nbsp;
                         اضافة معاملة</a>
-                    <a class="modal-effect btn btn-sm btn-primary" href="#" style="color:white"><i
-                            class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a>
+                    {{-- <a class="modal-effect btn btn-sm btn-primary" href="#" style="color:white"><i
+                            class="fas fa-file-download"></i>&nbsp;تصدير اكسيل</a> --}}
 
                 </div>
                 <div class="card-body">
@@ -112,8 +112,8 @@
                                                         data-id="{{ $account->id }}"
                                                         data-account_name="{{ $account->name }}"
                                                         data-account_description="{{ $account->description }}"
-                                                        data-account_price="{{$account->price}}"
-                                                        data-toggle="modal" href="#edtaccount"><i
+                                                        data-account_price="{{ $account->price }}" data-toggle="modal"
+                                                        href="#edtaccount"><i
                                                             class="text-info fas fa-edit"></i>&nbsp;&nbsp;تعديل
                                                         المعاملة</a>
                                                     <a class="dropdown-item" href="#"
@@ -121,7 +121,8 @@
                                                         data-target="#delete_invoice"><i
                                                             class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;حذف
                                                         المعاملة</a>
-                                                    <a class="dropdown-item" href="{{route('account.print', $account->id)}}"><i
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('account.print', $account->id) }}"><i
                                                             class="text-success fas fa-print"></i>&nbsp;&nbsp;طباعة
                                                         المعاملة
                                                     </a>
@@ -146,8 +147,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
-                    <h6 class="modal-title">اضافة معاملة</h6><button aria-label="Close" class="close"
-                        data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    <h6 class="modal-title">اضافة معاملة</h6><button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('account.store') }}" method="post">
@@ -155,11 +156,11 @@
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">اسم معاملة</label>
-                            <input type="text" class="form-control" id="account_name"  name="name">
+                            <input type="text" class="form-control" id="account_name" name="name">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">الوصف</label>
-                            <textarea name="description" class="form-control"  style="height:130px" cols="30" rows="10"></textarea>
+                            <textarea name="description" class="form-control" style="height:130px" cols="30" rows="10"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">المبلغ </label>
@@ -198,7 +199,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">الوصف</label>
-                            <textarea name="description" class="form-control" id="account_description" style="height:130px" cols="30" rows="10"></textarea>
+                            <textarea name="description" class="form-control" id="account_description" style="height:130px" cols="30"
+                                rows="10"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">المبلغ </label>
@@ -229,7 +231,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <form action="{{route('account.delete')}}" method="post">
+                    <form action="{{ route('account.delete') }}" method="post">
                         @method('DELETE')
                         @csrf
                 </div>
@@ -325,20 +327,20 @@
         })
     </script>
 
-<script>
-    $('#edtaccount').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget)
-        var id = button.data('id')
-        var account_name = button.data('account_name')
-        var account_description = button.data('account_description')
-        var account_price = button.data('account_price')
-        var modal = $(this)
-        modal.find('.modal-body #id').val(id);
-        modal.find('.modal-body #account_name').val(account_name);
-        modal.find('.modal-body #account_description').val(account_description);
-        modal.find('.modal-body #account_price').val(account_price);
-    })
-</script>
+    <script>
+        $('#edtaccount').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var id = button.data('id')
+            var account_name = button.data('account_name')
+            var account_description = button.data('account_description')
+            var account_price = button.data('account_price')
+            var modal = $(this)
+            modal.find('.modal-body #id').val(id);
+            modal.find('.modal-body #account_name').val(account_name);
+            modal.find('.modal-body #account_description').val(account_description);
+            modal.find('.modal-body #account_price').val(account_price);
+        })
+    </script>
 
 
 

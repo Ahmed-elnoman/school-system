@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TeacherRequest;
 use App\Models\Department;
 use App\Models\Freeze;
 use App\Models\Teacher;
@@ -29,43 +30,36 @@ class TeacherController extends Controller
         return view('admin.content.teachers.create', compact('departments'));
     }
 
-    public function store(Request $request) {
-        $request->validate([
-            'name'            => ['required', 'string'],
-            'email'           => ['required', 'email'],
-            'file'            => ['required', 'file'],
-            'gender'          => ['required'],
-            'address'         => ['required'],
-            'phone'           => ['required','max:10','min:10'],
-            'department'      => ['required'],
-            'salary'          => ['required'],
-            'join_date'       => ['required']
-        ],[
-
-            // name
-            'name.required' => ('اسم مطلوب'),
-            'name.string'   => ('يجب ان يكون من نوع نص'),
+    public function store(TeacherRequest $request) {
+        $request->validate( [
+            'name'          => 'required|string',
+            'email'         => 'required|email|unique:teachers,email',
+            'file'          => 'required|file',
+            'gender'        => 'required|string',
+            'address'       => 'required',
+            'phone'         => 'required|numeric',
+            'department'    => 'required',
+            'salary'        => 'required|numeric',
+            'join_date'     => 'required '
+        ], [
+            'name.required' => 'الحقل  الاسم اجباري',
+            'name.string'   => 'حقل الاسم يجب ان يكون من نوع نص',
             // email
-            'email.required' => ('البريد الالكتروني مطلوب'),
-            'email.email'    => ('يجب ان يكون بريد الكتروني'),
+            'email.required' => 'حقل البريد الاكتروني اجباري',
+            'email.email'    => 'يجب ان يكون بريد الكتروني',
             // image
-            'file.required' => ('الصورة الشخصية مطلوب'),
-            'file.file'     => ('يجب ان يتحتوي على صورة'),
+            'file.required' => 'الصورة الشخصية اجباري',
+            'file.file'     => 'يجب ان يتحتوي على صورة',
             // gender
-            'gender.required' => ('الجنس مطلوب'),
+            'gender.required' => 'الجنس اجباري',
             // address
-            'address.required' => ('العنوان مطلوب'),
+            'address.required' => 'العنوان اجباري',
             // phone
-            'phone.required' => ('رقام ولي الامر مطلوب'),
-            'phone.max'      => ('يجب اقل من 10 ارقام'),
-            'phone.min'      => ('يجب اقل من 10 ارقام'), // مراجع
+            'phone.required' => 'رقام ولي الامر اجباري',
             // department_id
-            'department.required' => ('اسم القسم مطلوب'),
+            'department.required' => 'اسم القسم اجباري',
             // salary
-            'salary.required' => ('الراتب مطلوب'),
-            // join_date
-            'join_date.required' => ('تاريخ الانضمام مطلوب'),
-
+            'salary.required' => 'الراتب اجباري',
         ]);
 
         if($request->file('file')){
@@ -95,10 +89,17 @@ class TeacherController extends Controller
         }
     }
 
-    public function update(Request $request) {
+    public function edit($id) {
+        $teacher = Teacher::find($id);
+        $departments = Department::all();
 
-        $id  = $request->id;
+       return view('admin.content.teachers.edit', compact('teacher', 'departments'));
+    }
 
+    public function update($id, TeacherRequest $request) {
+
+        $request->validate($request);
+        return $request;
         if($request->file('file')) {
             $file  = $request->file('file');
             $fName = $file->hashName();
@@ -121,6 +122,8 @@ class TeacherController extends Controller
                 'salary'          => $request->salary,
                 'join_date'       => $request->join_date
             ]);
+            session()->flash('edit', 'تم التعديل بنجاح');
+            return back();
         }else {
             session()->flash('error', 'يرج اضافة صورة');
             return back();

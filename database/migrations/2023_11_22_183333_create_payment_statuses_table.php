@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->double('total_fees');
             $table->string('payment_status');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('medical_situation_file')->nullable();
             $table->foreignId('chargeFor_id')->constrained('charge_fors');
             $table->foreignId('classRoom_id')->constrained('class_rooms');
-            $table->foreignId('an_exception_id')->constrained('an_exceptions')->onDelete('NO ACTION')->onUpdate('RESTRICT')->nullable();
+            $table->foreignId('an_exception_id')->nullable()->constrained('an_exceptions')->onDelete('NO ACTION')->onUpdate('RESTRICT');
             $table->softDeletes();
             $table->timestamps();
         });

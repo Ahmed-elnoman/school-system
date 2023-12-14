@@ -144,17 +144,7 @@
                                                     type="button">العمليات<i class="fas fa-caret-down ml-1"></i></button>
                                                 <div class="dropdown-menu tx-13">
                                                     <a class="dropdown-item" data-effect="effect-scale"
-                                                        data-id="{{ $teachers->id }}"
-                                                        data-teachers_name="{{ $teachers->full_name }}"
-                                                        data-teachers_email="{{ $teachers->email }}"
-                                                        data-teachers_image="{{ $teachers->image }}"
-                                                        data-teachers_gender="{{ $teachers->gender }}"
-                                                        data-teachers_address="{{ $teachers->address }}"
-                                                        data-teachers_phone="{{ $teachers->phone }}"
-                                                        data-teachers_department_id="{{ $teachers->department_id }}"
-                                                        data-teachers_salary="{{ $teachers->salary }}"
-                                                        data-teachers_join_date="{{ $teachers->join_date }}"
-                                                        data-toggle="modal" href="#edit_teacher"><i
+                                                        href="{{ route('teacher.edit', $teachers->id) }}"><i
                                                             class="text-info fas fa-edit"></i>&nbsp;&nbsp;تعديل
                                                         البيانات</a>
                                                     <a class="dropdown-item" href="#"
@@ -258,7 +248,7 @@
     {{-- end add modal  --}}
 
     {{-- statr edit account modal  --}}
-    <div class="modal" id="edit_teacher">
+    {{-- <div class="modal" id="edit_teacher">
         <div class="modal-dialog" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
@@ -324,11 +314,10 @@
         <!-- End Basic modal -->
 
 
-    </div>
+    </div> --}}
 
     {{-- end edit modal --}}
 
-    <!-- حذف الفاتورة -->
     <div class="modal fade" id="soft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -472,38 +461,6 @@
             modal.find('.modal-body #invoice_id').val(invoice_id);
         })
     </script>
-
-    <script>
-        $('#edit_teacher').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var teacher_name = button.data('teachers_name')
-            var teacher_email = button.data('teachers_email')
-            var teacher_image = button.data('teachers_image')
-            var teacher_gender = button.data('teachers_gender')
-            var teacher_address = button.data('teachers_address')
-            var teacher_phone = button.data('teachers_phone')
-            var teacher_department_id = button.data('teachers_department_id')
-            var teacher_salary = button.data('teachers_salary')
-            var teacher_join_date = button.data('teachers_join_date')
-            var modal = $(this)
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #teachers_name').val(teacher_name);
-            modal.find('.modal-body #teachers_email').val(teacher_email);
-            modal.find('.modal-body #teachers_gender').val(teacher_gender);
-            modal.find('.modal-body #teachers_address').val(teacher_address);
-            modal.find('.modal-body #teachers_phone').val(teacher_phone);
-            modal.find('.modal-body #teachers_department_id').val(teacher_department_id);
-            modal.find('.modal-body #teachers_salary').val(teacher_salary);
-            modal.find('.modal-body #teachers_join_date').val(teacher_join_date);
-            // modal.find('.modal-body #teachers_image').val(teacher_image);
-        })
-    </script>
-
-
-
-
-
 
 
 @endsection

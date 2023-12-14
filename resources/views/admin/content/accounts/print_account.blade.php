@@ -6,7 +6,6 @@
                 display: none;
             }
         }
-
     </style>
 @endsection
 @section('title')
@@ -17,7 +16,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <a class="content-title mb-0 my-auto text-dark" href="{{route('account.index')}}">الحسابات</a><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                <a class="content-title mb-0 my-auto text-dark" href="{{ route('account.index') }}">الحسابات</a><span
+                    class="text-muted mt-1 tx-13 mr-2 mb-0">/
                     معاينة طباعة معاملة</span>
             </div>
         </div>
@@ -35,22 +35,19 @@
                         <div class="invoice-header">
                             <h1 class="invoice-title">مدرسة المستقبل</h1>
                         </div><!-- invoice-header -->
+                        <div style="text-align:center">
+                            <img src="{{ asset('assets/img/icons/page-help-center-badge-light.png') }}"
+                                style="margin-top:-30px">
+                        </div>
                         <div class="row mg-t-20">
-                            {{-- <div class="col-md">
-                                <label class="tx-gray-600">Billed To</label>
-                                <div class="billed-to">
-                                    <h6>Juan Dela Cruz</h6>
-                                    <p>4033 Patterson Road, Staten Island, NY 10301<br>
-                                        Tel No: 324 445-4544<br>
-                                        Email: youremail@companyname.com</p>
-                                </div>
-                            </div> --}}
                             <div class="col-md-6">
                                 <label class="tx-gray-600">معلومات معاملة</label>
-                                <p class="invoice-info-row"><span>رقم معاملة</span>
-                                    <span>{{ $account->id }}</span></p>
+                                <p class="invoice-info-row"><span>نوع معاملة</span>
+                                    <span>{{ $account->name }}</span>
+                                </p>
                                 <p class="invoice-info-row"><span>تاريخ الاصدار</span>
-                                    <span>{{ $account->created_at }}</span></p>
+                                    <span>{{ $account->created_at }}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="table-responsive mg-t-40">
@@ -67,8 +64,8 @@
                                     <tr>
                                         <td>1</td>
                                         <td class="tx-12">{{ $account->name }}</td>
-                                        <td class="tx-center">{{ $account->description}}</td>
-                                        <td class="tx-right">{{$account->price }}</td>
+                                        <td class="tx-center">{{ $account->description }}</td>
+                                        <td class="tx-right">{{ $account->price }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -100,11 +97,11 @@
             var printContents = document.getElementById('print').innerHTML;
             var originalContents = document.body.innerHTML;
             document.body.innerHTML = printContents;
+            console.log(document.body.innerHTML = printContents)
             window.print();
             document.body.innerHTML = originalContents;
             location.reload();
         }
-
     </script>
 
 @endsection

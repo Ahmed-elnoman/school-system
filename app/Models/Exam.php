@@ -11,10 +11,17 @@ class Exam extends Model
 
     protected $fillable = [
         'name',
-        'date'
+        'date',
+        'class_room_id',
+        'time'
     ];
 
-    public function result(){
+    public function result() {
         return $this->hasMany(Result::class);
     }
+
+    public function subject() {
+        return $this->belongsTo(ClassRoom::class, 'class_room_id');
+    }
+
 }

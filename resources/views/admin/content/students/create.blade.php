@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css') }}">
     <!--Internal  TelephoneInput css-->
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
+    <link href="{{ URL::asset('assets/plugins/accordion/accordion.css') }}" rel="stylesheet" />
 @endsection
 @section('title')
     الطلاب
@@ -27,6 +28,16 @@
     <!-- breadcrumb -->
 @endsection
 @section('content')
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if (session()->has('Add'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,14 +70,14 @@
                             <div class="col-2">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">اسم التلميذ</label>
-                                    <input type="text" class="form-control" id="student_name" name="name">
+                                    <input type="text" class="form-control" id="student_name" name="name" value="{{old('name')}}" />
                                 </div>
                             </div>
 
                             <div class="col-7">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">اسم ولي الامر</label>
-                                    <input type="text" class="form-control" id="student_name" name="parent_name">
+                                    <input type="text" class="form-control" id="parent_name" name="parent_name" value="{{old('parent_name')}}" />
                                 </div>
                             </div>
 
@@ -86,28 +97,58 @@
                             <div class="col-6">
                                 <div class="form-group mt-1">
                                     <label for="exampleInputEmail1">العنوان التلميذ</label>
-                                    <input type="test" class="form-control" id="section_name" name="address">
+                                    <input type="test" class="form-control" id="section_name" name="address" value="{{old('address')}}" />
                                 </div>
                             </div>
 
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">رقم هاتف ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="phone_parent">
+                                    <input type="number" class="form-control" id="phone_parent" name="phone_parent" value="{{old('phone_parent')}}" />
+                                    <p class="text-danger" id="length"></p>
+                                </div>
+                            </div>
+                            <p class="text-info mr-3 mt-3">الحالة الصحية لتلميذ</p>
+                            <div class="col-2 col-sm-2 col-md-2 mb-2 mt-3">
+                                <div class="form-group">
+                                    <input type="checkbox" name="good" value="سليم" class="from-control"
+                                        id="">
+                                    <label for="exampleInputEmail1">سليم</label>
+                                </div>
+                            </div>
+                            <div class="col-7 col-sm-7 col-md-7 mb-2 mt-3">
+                                <div class="form-group">
+                                    <input type="checkbox" class="from-control" aria-controls="collapseOne2"
+                                        aria-expanded="true" data-toggle="collapse" href="#collapseOne2" class="collapsed">
+                                    <label for="exampleInputEmail1">صاحب مرض</label>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">الحالة الصحية لتلميذ</label>
-                                    <textarea class="form-control" id="section_name" name="medical_situation" cols="30" rows="5"></textarea>
+                                <div aria-multiselectable="false" class="accordion accordion-dark" id="accordion2"
+                                    role="tablist">
+                                    <div class="card mb-0">
+                                        <div aria-labelledby="headingOne2" class="collapse" data-parent="#accordion2"
+                                            id="collapseOne2" role="tabpanel">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">اسم المرض</label>
+                                                    <input type="test" class="form-control" id="section_name"
+                                                        name="medical_situation">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 mb-3">
+                                                <label for="exampleInputEmail1">الملف الطبي</label>
+                                                <input type="file" name="medical_situation_file"
+                                                    id="medical_situation_file" class="dropify"
+                                                    accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
+                                            </div><br>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="text-danger">* اذا يوجد مستند للحالة الصحية للتلميذ </p>
-                            <div class="col-sm-12 col-md-12 mb-3">
-                                <input type="file" name="medical_situation_file" class="dropify"
-                                    accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
-                            </div><br>
+
+
                         </div>
 
                         {{-- 3 --}}
@@ -115,19 +156,20 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">البريد الالكتروني ولي الامر</label>
-                                    <input type="email" class="form-control" id="student_email" name="parent_email">
+                                    <input type="email" class="form-control" id="student_email" name="parent_email" value="{{old('parent_email')}}" />
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group mt-1">
                                     <label for="exampleInputEmail1">العنوان ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="parent_address">
+                                    <input type="test" class="form-control" id="parent_address"
+                                        name="parent_address" value="{{old('parent_address')}}" />
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">وظيفة ولي الامر</label>
-                                    <input type="test" class="form-control" id="section_name" name="parent_job">
+                                    <input type="test" class="form-control" id="parent_job" name="parent_job" value="{{old('parent_job')}}" />
                                 </div>
                             </div>
                         </div>
@@ -172,8 +214,8 @@
                         <div class="row mb-2 mb-3">
                             <div class="col-6">
                                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">نوع الاستثناء</label>
-                                <select name="an_exception" id="an_exception" class="form-control" required>
-                                    <option value="" selected disabled> --حدد الاستثناء--</option>
+                                <select name="an_exception" id="an_exception" class="form-control">
+                                    <option value="0" selected disabled> --حدد الاستثناء--</option>
                                     @foreach ($an_exceptions as $an)
                                         <option value={{ $an->id }}>{{ $an->type }}</option>
                                     @endforeach
@@ -182,22 +224,38 @@
                             </div>
                             <div class="col-6">
                                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">نسية الخصمة</label>
-                                <select name="discount_rate" id="discount_rate_id" class="form-control" @readonly(true)
-                                    required>
+                                <select name="discount_rate" id="discount_rate_id" class="form-control"
+                                    @readonly(true)>
 
                                 </select>
                             </div>
-                            <div class="col-12 m-2">
-                                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الرسوم النهاية</label>
-                                <input type="number" name="total_fees" class="form-control" id="">
+                            <div class="col-6">
+                                <tr>
+                                    <td class="tx-right tx-uppercase tx-bold tx-inverse">ما تم خصمه</td>
+                                    <td class="tx-right" colspan="2">
+                                        <h4 class="tx-primary tx-bold" id="result"></h4>
+                                    </td>
+                                </tr>
                             </div>
-                            <div class="col-12 m-2">
+                            <div class="col-6">
+                                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الرسوم النهاية</label>
+                                <input type="number" name="total_fees" class="form-control" id="total" value="{{old('total_fees')}}" />
+                            </div>
+                            <div class="col-6">
                                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">حالة الدفعة</label>
-                                <input type="text" name="payment_status" class="form-control" id="">
+                                <input type="text" name="payment_status" class="form-control" readonly
+                                    id="statusOfPsyment">
+                            </div>
+                            <div class="col-6">
+                                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">المتبقي</label>
+                                <input type="text" name="residual" style="color:red" readonly class="form-control"
+                                    id="residual">
                             </div>
                             <div class="col-12 m-2">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">السبب <span class="text-danger tx-sm">اذا كان الدفع غير مكتمل</span></label>
+                                    <label for="exampleInputEmail1">السبب <span class="text-danger tx-sm">اذا كان
+                                            الدفع
+                                            غير مكتمل</span></label>
                                     <textarea class="form-control" id="section_name" name="description" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
@@ -247,6 +305,13 @@
     <!-- Internal form-elements js -->
     <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
 
+    <script src="{{ URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js') }}"></script>
+    <!-- Internal Select2 js-->
+    <script src="{{ URL::asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <!--- Internal Accordion Js -->
+    <script src="{{ URL::asset('assets/plugins/accordion/accordion.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/accordion.js') }}"></script>
+
 
 
     <script>
@@ -262,11 +327,13 @@
                     $.each(res.charge, function(key, value) {
                         const i = value.total_fees;
                         console.log(i)
-                        $('#charge_for').append('<option value="' + value.id + '">' + value
+                        $('#charge_for').append('<option id="fees" value="' + value.id + '">' +
+                            value
                             .total_fees + '</option>');
                     });
                     $.each(res.charge, function(key, value) {
-                        $('#first_payment').append('<option value="' + value.id + '">' + value
+                        $('#first_payment').append('<option id="firstPayment" value="' + value
+                            .id + '">' + value
                             .first_payment + '</option>');
                     });
                     $.each(res.charge, function(key, value) {
@@ -276,10 +343,6 @@
                 }
             });
         });
-
-    </script>
-
-    <script>
         $('#an_exception').on('change', function() {
             var idState = this.value;
             $('#discount_rate_id').html('');
@@ -291,18 +354,51 @@
                     $.each(res.charge, function(key, value) {
                         const j = value.discount_rate
                         console.log(j)
-                        $('#discount_rate_id').append('<option id="class" value="' + value.id + '">' +
+                        $('#discount_rate_id').append('<option id="class" value="' + value.id +
+                            '">' +
                             value
-                            .discount_rate + '%' + '</option>');
+                            .discount_rate + '</option>');
                     });
                 }
             });
         });
-    </script>
 
-    {{-- <script>
-        console.log(1);
-    </script> --}}
+        $('#total').on('focus', function() {
+            const total_fees = document.getElementById('fees');
+            var discount = document.getElementById('class');
+            if (discount != null) {
+                const result = total_fees.text * discount.text / 100;
+                document.getElementById('result').innerText = result;
+            }
+        });
+        $('#total').on('change', function() {
+            const thisValue = this.value;
+            var discount = document.getElementById('class');
+            const result = document.getElementById('result');
+            var residual = document.getElementById('residual');
+            const firstPayment = document.getElementById('firstPayment');
+            var statusOfPsyment = document.getElementById('statusOfPsyment');
+            var fees = document.getElementById('fees');
+
+            const total_fees = fees.text - result.innerText;
+            if (discount != null) {
+                statusOfPsyment.value = 'تم دفعة ' + thisValue + 'من اجمالي الرسوم';
+                residual.value = total_fees - thisValue;
+            } else {
+                statusOfPsyment.value = 'تم دفعة ' + thisValue + 'من اجمالي الرسوم';
+                residual.value = firstPayment.text - thisValue;
+            }
+        });
+
+        $('#phone_parent').on('change', function() {
+            if(this.value.length != 10) {
+                document.getElementById('length').innerText = 'الرقم ناقص يجب ان يكون 10 ارقام'
+            }else{
+                document.getElementById('length').innerText = '  '
+            }
+        })
+
+    </script>
 
 
 @endsection

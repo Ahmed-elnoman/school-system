@@ -18,7 +18,7 @@ class TimeTable extends Model
     ];
 
     public function subject() {
-        return $this->belongsTo(Subject::class,);
+        return $this->belongsTo(Subject::class);
     }
 
     public function classRoom() {

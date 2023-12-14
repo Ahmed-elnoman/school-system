@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-Route::get('login' , [UserController::class, 'login'])->name('login');
-Route::post('log' , [UserController::class, 'log'])->name('log');
 
 Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('dashboard' , [UserController::class, 'dashboard'])->name('dashboard');
@@ -51,9 +49,10 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
     // teacher routes
     Route::get('teacher/index', [TeacherController::class, 'index'])->name('teacher.index');
-    Route::get('teacher/crate', [TeacherController::class, 'create'])->name('teacher.create');
+    Route::get('teacher/create', [TeacherController::class, 'create'])->name('teacher.create');
     Route::post('teacher/store', [TeacherController::class, 'store'])->name('teacher.store');
-    Route::put('teacher/update', [TeacherController::class, 'update'])->name('teacher.update');
+    Route::get('teacher/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
+    Route::put('teacher/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
     Route::post('teacher/freeze', [TeacherController::class, 'freeze'])->name('teacher.freeze');
     Route::get('teacher/freezes/get', [TeacherController::class, 'getFreezes'])->name('teacher.get.freezes');
     Route::delete('teacher/freezes/delete', [TeacherController::class, 'deleteFreeze'])->name('teacher.delete.freeze');
@@ -106,11 +105,23 @@ Route::prefix('admin')->middleware('auth')->group(function() {
 
     // result routes
     Route::get('result/index', [ResultController::class, 'index'])->name('result.index');
+    Route::get('result/search/new', [ResultController::class, 'searchNew'])->name('result.search.new');
     Route::post('result/store', [ResultController::class, 'store'])->name('result.store');
+    Route::get('result/time/{id}', [ResultController::class, 'resultTime'])->name('result.time');
     Route::put('result/update', [ResultController::class, 'update'])->name('result.update');
     Route::get('result/print/{id}', [ResultController::class, 'print'])->name('result.print');
 
     // time table route
     Route::get('time_table/index', [TimeTableController::class, 'index'])->name('time.index');
+    Route::get('time_table/show', [TimeTableController::class, 'show'])->name('time.show');
     Route::post('time_table/store', [TimeTableController::class, 'store'])->name('time.store');
+    Route::get('time_table/print/{name}', [TimeTableController::class, 'print'])->name('time.print');
+
+    // emails routes
+    // R
 });
+
+Route::get('login' , [UserController::class, 'login'])->name('login');
+Route::post('log' , [UserController::class, 'log'])->name('log');
+Route::post('logout', [UserController::class, 'logout'])->name('logout');
+Route::get('user/profile/{id}', [UserController::class, 'profile'])->name('profile');

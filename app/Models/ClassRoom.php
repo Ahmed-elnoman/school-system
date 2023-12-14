@@ -29,4 +29,8 @@ class ClassRoom extends Model
     public function charge_for() {
         return $this->hasOne(ChargeFor::class);
     }
+
+    public function exam() {
+        return $this->hasOne(Exam::class);
+    }
 }

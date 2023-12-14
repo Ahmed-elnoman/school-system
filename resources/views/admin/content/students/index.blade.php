@@ -114,7 +114,6 @@
                                             <th class="border-bottom-0">الجنس</th>
                                             <th class="border-bottom-0">هاتف ولي الامر</th>
                                             <th class="border-bottom-0">السلوك</th>
-                                            {{-- <th class="border-bottom-0">الرسوم</th> --}}
                                             <th class="border-bottom-0">تاريخ الانضمام</th>
                                             <th class="border-bottom-0">العمليات</th>
                                         </tr>
@@ -314,7 +313,7 @@
         {{-- start fees modal  --}}
         <div class="modal fade" id="fees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document" id="print">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">الملف المالي للتلميذ</h5>
@@ -342,9 +341,13 @@
                         <p class="invoice-info-row"><span>حالة دفعة</span>
                             <span id="payment_status"></span>
                         </p>
-                        <p class="invoice-info-row mb-3"><span></span>
-                            {{-- <span id="medical_situation_file"></span> --}}
+                        <p class="invoice-info-row"><span>المتبقي</span>
+                            <span id="residual"></span>
                         </p>
+                        <p class="invoice-info-row mb-3"><span></span>
+                        </p>
+                        <button class="btn btn-danger  float-left mt-1 mr-2" id="print_Button" onclick="printDiv()"> <i
+                            class="mdi mdi-printer ml-1"></i>طباعة</button>
                     </div>
                 </div>
             </div>
@@ -372,9 +375,9 @@
                         </p>
                         <p class="invoice-info-row"><span>الملف الطبي</span>
                             <span id="medical_situation_file"></span>
+                            {{-- <img src="" alt="" srcset=""> --}}
                         </p>
                         <p class="invoice-info-row mb-3"><span></span>
-                            {{-- <span id="medical_situation_file"></span> --}}
                         </p>
                     </div>
                 </div>
@@ -462,7 +465,27 @@
             modal.find('.modal-body #second_payment').html(second_payment);
             modal.find('.modal-body #total_fees').html(total_fees);
             modal.find('.modal-body #payment_status').html(payment_status);
+
+            //
+            // var residual  = document.getElementById('');
+            var total_resresidual = first_payment - total_fees;
+           if(total_resresidual == 0) {
+            // modal.find('.modal-body #residual').innerHTML
+            residual.innerHTML = 'تم دفعة كل الرسوم الدفعة الاول'
+           }
+           else {
+            residual.innerHTML = total_resresidual +'المتبقي من الرسو م الدفعة الاول'
+           }
         })
+
+        function printDiv() {
+            var printContents = document.getElementById('print').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        }
     </script>
     <script>
         $('#medicalSituation').on('show.bs.modal', function(event) {
@@ -472,10 +495,18 @@
             var medical_situation = button.data('medical_situation')
             var medical_situation_file = button.data('medical_situation_file')
             var modal = $(this)
+
+            console.log(medical_situation_file);
             modal.find('.modal-body #student_id').val(student_id);
             modal.find('.modal-body #student_name').html(student_name);
             modal.find('.modal-body #medical_situation').html(medical_situation);
-            modal.find('.modal-body #medical_situation_file').html(medical_situation_file);
+            /////////////////////////////////////////////////////////////////////
+            if(medical_situation_file === null){
+                modal.find('.modal-body #medical_situation_file').html('<p class="text-success" > لا يوجد ملف طبي للتلميذ</p>');
+            }
+            else{
+                modal.find('.modal-body #medical_situation_file').html('<img src="' + medical_situation_file +'" width="50px" />');
+            }
         })
     </script>
     <script>
@@ -512,31 +543,6 @@
             });
         });
     </script>
-
-    {{-- <script>
-        $('#editStudent').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var student_name = button.data('student_name')
-            // var student_email = button.data('student_email')
-            // var class_room = button.data('class_room')
-            var student_address = button.data('student_address')
-            var student_gender = button.data('student_gender')
-            var student_phone_parent = button.data('student_phone_parent')
-            // var charge_for = button.data('charge_for')
-            var student_join_date = button.data('student_join_date')
-            var modal = $(this)
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #student_name').val(student_name);
-            // modal.find('.modal-body #student_email').val(student_email);
-            // modal.find('.modal-body #class_room').val(class_room);
-            modal.find('.modal-body #student_address').val(student_address);
-            modal.find('.modal-body #student_gender').val(student_gender);
-            modal.find('.modal-body #student_phone_parent').val(student_phone_parent);
-            // modal.find('.modal-body #charge_for').val(charge_for);
-            modal.find('.modal-body #student_join_date').val(student_join_date);
-        })
-    </script> --}}
 
 
 

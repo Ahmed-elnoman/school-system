@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->time('time');
             $table->date('date');
+            $table->foreignId('class_room_id')->constrained('class_rooms')
+                ->onDelete('NO ACTION')->onUpdate('NO ACTION');
             $table->timestamps();
         });
     }

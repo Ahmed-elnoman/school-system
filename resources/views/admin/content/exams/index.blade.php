@@ -85,7 +85,9 @@
                                 <tr>
                                     <th class="border-bottom-0">#</th>
                                     <th class="border-bottom-0">اسم المادة</th>
+                                    <th class="border-bottom-0">اسم الصف</th>
                                     <th class="border-bottom-0">التاريخ الامتحان</th>
+                                    <th class="border-bottom-0">زمن الامتحان</th>
                                     {{-- <th class="border-bottom-0">العمليات</th> --}}
                                 </tr>
                             </thead>
@@ -96,18 +98,20 @@
                                     <tr>
                                         <td>{{ $i }}</td>
                                         <td>{{ $subject->name }}</td>
+                                        <td>{{ $subject->subject->name }}</td>
                                         <td>{{ $subject->date }}</td>
+                                        <td>{{ $subject->time }}</td>
                                         {{-- <td> --}}
-                                            {{-- @if ($subject->id > 0) --}}
-                                                {{-- <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+                                        {{-- @if ($subject->id > 0) --}}
+                                        {{-- <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
                                                     data-id="{{ $subject->id }}" data-subject_name="{{ $subject->name }}"
                                                     data-subject_grade="{{ $subject->grade }}" data-toggle="modal"
                                                     href="#editsubject" title="تعديل"><i class="las la-pen"></i></a> --}}
-                                                {{-- <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+                                        {{-- <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
                                                     data-id="{{ $subject->id }}"
                                                     data-section_name="{{ $subject->section_name }}" data-toggle="modal"
                                                     href="#modaldemo9" title="حذف"><i class="las la-trash"></i></a> --}}
-                                            {{-- @endif --}}
+                                        {{-- @endif --}}
                                         {{-- </td> --}}
                                     </tr>
                                 @endforeach
@@ -137,14 +141,29 @@
                             <select name="subject" id="subject" class="form-control" required>
                                 <option value="" selected disabled> --حدد المادة--</option>
                                 @foreach ($subjects as $subject)
-                                    <option value="{{ $subject->name}}">{{ $subject->name }}</option>
+                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">اسم الصف</label>
+                            <select name="class_name" id="class_name" class="form-control" required>
+                                <option value="" selected disabled> --حدد الصف--</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">تاريخ الامتحان</label>
-                            <input type="date" class="form-control" id="subject_date" name="subject_date">
+                            <input type="date" class="form-control" id="subject_date" name="exam_date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">زمن الامتحان</label>
+                            <input type="time" class="form-control" id="subject_date" name="exam_time">
                         </div>
 
                         <div class="modal-footer">
