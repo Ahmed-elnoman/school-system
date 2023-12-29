@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('results', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('marks');
+            $table->json('marks');
+            $table->string('GAP');
+            $table->date('year');
+            $table->string('type_result');
             $table->timestamps();
         });
     }

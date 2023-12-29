@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Registration_student;
+use App\Mail\Student_Message;
 use App\Models\AnException;
 use App\Models\ChargeFor;
 use App\Models\ClassRoom;
@@ -11,6 +13,7 @@ use App\Models\PaymentStatus;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
@@ -131,6 +134,7 @@ class StudentController extends Controller
                 'student_id'      => $student->id
             ]);
 
+            Mail::to($request->parent_email)->send(new Registration_student($request->parent_name));
             session()->flash('Add', 'تم التسجيل بنجاح');
             return back();
         }
@@ -308,6 +312,12 @@ class StudentController extends Controller
             session()->flash('edit', 'تم تعديل بنجاح');
             return back();
         }
+    }
+
+    public function sendMessage(Request $request) {
+       Mail::to($request->mail)->send(new Student_Message($request));
+       session()->flash('send', 'تم ارسالة الرسالة بنجاح');
+       return back();
     }
 
     public function problem(Request $request) {

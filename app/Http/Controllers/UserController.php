@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClassRoom;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,8 @@ class UserController extends Controller
         }
     }
     public function dashboard() {
-        return view('admin.dashboard');
+        $classes = ClassRoom::all();
+        return view('admin.dashboard', compact('classes'));
     }
 
     public function logout() {

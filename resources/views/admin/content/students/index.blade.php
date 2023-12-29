@@ -63,6 +63,16 @@
         </div>
     @endif
 
+
+    @if (session()->has('send'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('send') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     @if (session()->has('edit'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>{{ session()->get('edit') }}</strong>
@@ -153,7 +163,7 @@
                                                                 class="fas fa-caret-down ml-1"></i></button>
                                                         <div class="dropdown-menu tx-13">
                                                             <a class="dropdown-item"
-                                                            href="{{route('student.edit', $student->id)}}"><i
+                                                                href="{{ route('student.edit', $student->id) }}"><i
                                                                     class="text-info fas fa-edit"></i>&nbsp;&nbsp;تعديل
                                                                 بيانات الطلاب</a>
                                                             <a class="dropdown-item" href="#"
@@ -161,24 +171,31 @@
                                                                 data-target="#soft"><i
                                                                     class="text-danger fas fa-arrow-left"></i>&nbsp;&nbsp;فصل
                                                                 الطلاب</a>
-                                                            <a class="dropdown-item" href="#problme"
+                                                            <a class="dropdown-item"
                                                                 data-student_id="{{ $student->id }}" data-toggle="modal"
                                                                 data-target="#problme"><i
                                                                     class="text-danger fas fa-exclamation"></i>&nbsp;&nbsp;انزار
                                                                 الطلاب</a>
-                                                            <a class="dropdown-item" href="#problme"
+                                                            <a class="dropdown-item" href="#"
+                                                                data-student_id="{{ $student->id }}"
+                                                                data-mail_student="{{ $student->parent->email }}"
+                                                                data-toggle="modal" data-target="#send_mail"><i
+                                                                    class="text-success fas fa-paper-plane"></i>&nbsp;&nbsp;تواصل
+                                                                مع
+                                                                والي الامر
+                                                            </a>
+                                                            <a class="dropdown-item"
                                                                 data-student_id="{{ $student->id }}"
                                                                 data-student_name="{{ $student->name }} {{ $student->parent->name }}"
-                                                                data-student_total="{{$student->chargeFar->total_fees}}"
-                                                                data-first_payment="{{$student->chargeFar->first_payment}}"
-                                                                data-second_payment="{{$student->chargeFar->second_payment}}"
-                                                                data-total_fees="{{$student->payment_status->total_fees}}"
-                                                                data-payment_status="{{$student->payment_status->payment_status}}"
-                                                                data-toggle="modal"
-                                                                data-target="#fees"><i
+                                                                data-student_total="{{ $student->chargeFar->total_fees }}"
+                                                                data-first_payment="{{ $student->chargeFar->first_payment }}"
+                                                                data-second_payment="{{ $student->chargeFar->second_payment }}"
+                                                                data-total_fees="{{ $student->payment_status->total_fees }}"
+                                                                data-payment_status="{{ $student->payment_status->payment_status }}"
+                                                                data-toggle="modal" data-target="#fees"><i
                                                                     class="text-warning fas fa-folder"></i>&nbsp;&nbsp;الملف
                                                                 المالي</a>
-                                                            <a class="dropdown-item" href="#"
+                                                            <a class="dropdown-item"
                                                                 data-student_id="{{ $student->id }}"
                                                                 data-parent_name="{{ $student->parent->name }}"
                                                                 data-parent_email="{{ $student->parent->email }}"
@@ -187,7 +204,7 @@
                                                                 data-toggle="modal" data-target="#parent"><i
                                                                     class="text-success fas fa-address-card"></i>&nbsp;&nbsp;تفاصيل
                                                                 ولي الامر </a>
-                                                            <a class="dropdown-item" href="#"
+                                                            <a class="dropdown-item"
                                                                 data-student_id="{{ $student->id }}"
                                                                 data-student_name="{{ $student->name }} {{ $student->parent->name }}"
                                                                 data-medical_situation="{{ $student->medical_situation }}"
@@ -347,12 +364,46 @@
                         <p class="invoice-info-row mb-3"><span></span>
                         </p>
                         <button class="btn btn-danger  float-left mt-1 mr-2" id="print_Button" onclick="printDiv()"> <i
-                            class="mdi mdi-printer ml-1"></i>طباعة</button>
+                                class="mdi mdi-printer ml-1"></i>طباعة</button>
                     </div>
                 </div>
             </div>
         </div>
         {{-- end fees modal  --}}
+        {{-- start sand messages to student  --}}
+        <div class="modal fade" id="send_mail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ارسال الرسالة الي والي الامر</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <form action="{{ route('student.send.message') }}" method="post">
+                            @csrf
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="mail" id="mail" value="">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">عنوان الرسالة</label>
+                            <input type="test" class="form-control" id="title_message" name="titel_message"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">موضوع الرسالة </label>
+                            <textarea name="subject_message" class="form-control" id="subject_message" cols="30" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                        <button type="submit" class="btn btn-danger">ارسال</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{-- end sand messages to student  --}}
 
         {{-- start medical_situation modal  --}}
         <div class="modal fade" id="medicalSituation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -432,6 +483,14 @@
         })
     </script>
     <script>
+        $('#send_mail').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var mail_student = button.data('mail_student')
+            var modal = $(this)
+            modal.find('.modal-body #mail').val(mail_student);
+        })
+    </script>
+    <script>
         $('#parent').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var student_id = button.data('student_id')
@@ -451,12 +510,12 @@
         $('#fees').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var student_id = button.data('student_id')
-            var student_name    = button.data('student_name')
-            var student_total   = button.data('student_total')
-            var first_payment   = button.data('first_payment')
-            var second_payment  = button.data('second_payment')
-            var total_fees      = button.data('total_fees')
-            var payment_status  = button.data('payment_status')
+            var student_name = button.data('student_name')
+            var student_total = button.data('student_total')
+            var first_payment = button.data('first_payment')
+            var second_payment = button.data('second_payment')
+            var total_fees = button.data('total_fees')
+            var payment_status = button.data('payment_status')
             var modal = $(this)
             modal.find('.modal-body #student_id').val(student_id);
             modal.find('.modal-body #student_name').html(student_name);
@@ -469,13 +528,12 @@
             //
             // var residual  = document.getElementById('');
             var total_resresidual = first_payment - total_fees;
-           if(total_resresidual == 0) {
-            // modal.find('.modal-body #residual').innerHTML
-            residual.innerHTML = 'تم دفعة كل الرسوم الدفعة الاول'
-           }
-           else {
-            residual.innerHTML = total_resresidual +'المتبقي من الرسو م الدفعة الاول'
-           }
+            if (total_resresidual == 0) {
+                // modal.find('.modal-body #residual').innerHTML
+                residual.innerHTML = 'تم دفعة كل الرسوم الدفعة الاول'
+            } else {
+                residual.innerHTML = total_resresidual + 'المتبقي من الرسو م الدفعة الاول'
+            }
         })
 
         function printDiv() {
@@ -501,11 +559,12 @@
             modal.find('.modal-body #student_name').html(student_name);
             modal.find('.modal-body #medical_situation').html(medical_situation);
             /////////////////////////////////////////////////////////////////////
-            if(medical_situation_file === null){
-                modal.find('.modal-body #medical_situation_file').html('<p class="text-success" > لا يوجد ملف طبي للتلميذ</p>');
-            }
-            else{
-                modal.find('.modal-body #medical_situation_file').html('<img src="' + medical_situation_file +'" width="50px" />');
+            if (medical_situation_file === null) {
+                modal.find('.modal-body #medical_situation_file').html(
+                    '<p class="text-success" > لا يوجد ملف طبي للتلميذ</p>');
+            } else {
+                modal.find('.modal-body #medical_situation_file').html('<img src="' + medical_situation_file +
+                    '" width="50px" />');
             }
         })
     </script>

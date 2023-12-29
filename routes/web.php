@@ -14,6 +14,8 @@ use App\Http\Controllers\TimeTableController;
 use App\Http\Controllers\UserController;
 use App\Models\ChargeFor;
 use Illuminate\Support\Facades\Route;
+use App\Mail\Reqistration_teacher;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +56,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('teacher/edit/{id}', [TeacherController::class, 'edit'])->name('teacher.edit');
     Route::put('teacher/update/{id}', [TeacherController::class, 'update'])->name('teacher.update');
     Route::post('teacher/freeze', [TeacherController::class, 'freeze'])->name('teacher.freeze');
+    Route::post('teacher/send/messages', [TeacherController::class, 'sendMessage'])->name('teacher.send.message');
     Route::get('teacher/freezes/get', [TeacherController::class, 'getFreezes'])->name('teacher.get.freezes');
     Route::delete('teacher/freezes/delete', [TeacherController::class, 'deleteFreeze'])->name('teacher.delete.freeze');
     Route::delete('teacher/softDelete', [TeacherController::class, 'softDelete'])->name('teacher.soft');
@@ -88,6 +91,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('student/store', [StudentController::class, 'store'])->name('student.store');
     Route::get('student/edit/{id}', [StudentController::class, 'edit'])->name('student.edit');
     Route::put('student/update/{id}', [StudentController::class, 'update'])->name('student.update');
+    Route::post('student/send/message', [StudentController::class, 'sendMessage'])->name('student.send.message');
     Route::post('student/issues', [StudentController::class, 'problem'])->name('student.problem');
     Route::delete('student/softDelete', [StudentController::class, 'softDelete'])->name('student.softDelete');
     Route::get('student/Trashed/get', [StudentController::class, 'getTrashed'])->name('student.getTrashed');
@@ -117,8 +121,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::post('time_table/store', [TimeTableController::class, 'store'])->name('time.store');
     Route::get('time_table/print/{name}', [TimeTableController::class, 'print'])->name('time.print');
 
-    // emails routes
-    // R
+
 });
 
 Route::get('login' , [UserController::class, 'login'])->name('login');

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TeacherRequest;
+use App\Mail\Reqistration_teacher;
+use App\Mail\Teacher_Message;
 use App\Models\Department;
 use App\Models\Freeze;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class TeacherController extends Controller
 {
@@ -84,6 +87,7 @@ class TeacherController extends Controller
                 'salary'         => $request->salary,
                 'join_date'      => $request->join_date
             ]);
+            Mail::to($request->email)->send(new Reqistration_teacher($request->name));
             session()->flash('Add', 'تم اضافة بنجاح');
             return back();
         }
@@ -161,6 +165,12 @@ class TeacherController extends Controller
 
         Freeze::destroy($id);
         session()->flash('delete', 'تم عملية الحذف  بنجاح');
+        return back();
+    }
+
+    public function sendMessage(Request $request) {
+        Mail::to($request->mail)->send(new Teacher_Message($request));
+        session()->flash('send', 'تم ارسالة الرسالة بنجاح');
         return back();
     }
 

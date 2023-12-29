@@ -3,10 +3,15 @@
     التقارير
 @stop
 @section('css')
-    <!--Internal  Nice-select css  -->
-    <link href="{{ URL::asset('assets/plugins/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet" />
-    <!-- Internal Select2 css -->
+    <!-- Internal Data table css -->
+    <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <!--Internal   Notify -->
+    <link href="{{ URL::asset('assets/plugins/notify/css/notifIt.css') }}" rel="stylesheet" />
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
@@ -21,7 +26,6 @@
     <!-- breadcrumb -->
 @endsection
 @section('content')
-
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -41,54 +45,239 @@
         </div>
     @endif
 
-    <!-- row opened -->
+    @if (session()->has('delete'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('delete') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('error') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if (session()->has('edit'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('edit') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if (session()->has('freeze'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('freeze') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+
+    <!-- row -->
     <div class="row">
-        <div class="col-xl-12 col-md-12">
-            <div class="card">
+        <!--div-->
+        <div class="col-xl-12">
+            <div class="card mg-b-20">
+                <div class="card-header pb-0">
+                    <a data-effect="effect-scale" data-toggle="modal" href="#addteacher"
+                        class="modal-effect btn btn-sm btn-primary" style="color:white"><i class="fas fa-plus"></i>&nbsp;
+                        اضافة نتيجة</a>
+
+                </div>
                 <div class="card-body">
-                    <!-- Shopping Cart-->
-                    <form action="{{ route('result.store') }}" method="post">
+                    <div class="table-responsive">
+                        <table id="example1" class="table key-buttons text-md-nowrap"
+                            data-page-length='50'style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0">#</th>
+                                    <th class="border-bottom-0">اسم المعلم</th>
+                                    <th class="border-bottom-0">البريد الالكتروني</th>
+                                    <th class="border-bottom-0">الصوؤة</th>
+                                    <th class="border-bottom-0">الجنس</th>
+                                    <th class="border-bottom-0">العنوان</th>
+                                    <th class="border-bottom-0">الهاتف</th>
+                                    <th class="border-bottom-0">القسم</th>
+                                    <th class="border-bottom-0">الراتب</th>
+                                    <th class="border-bottom-0">تاريخ الانضمام</th>
+                                    <th class="border-bottom-0">العمليات</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/div-->
+    </div>
+
+    {{-- start add modal  --}}
+    <div class="modal" id="addteacher">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h6 class="modal-title">اضافة نتيجة</h6><button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('result.store') }}" method="post" enctype="multipart/form-data"
+                        autocomplete="off">
                         @csrf
-                        @method('POST')
-                        <div class="product-details table-responsive text-nowrap">
-                            <table class="table table-bordered table-hover mb-0 text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="border-bottom-0">اسم التلميذ</th>
-                                        @foreach ($subject_names as $name)
-                                            <th class="border-bottom-0">{{ $name->name }}</th>
-                                        @endforeach
-                                        <th class="border-bottom-0">الدرجة النهاية</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($students as $student)
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="student_name" class="form-control"
-                                                    style="width:200px" readonly
-                                                    value="{{ $student->name }} {{ $student->parent->name }}">
-                                            </td>
-                                            @foreach ($subject_names as $name)
-                                                <td><input type="number" name="mark" class="form-control"
-                                                        style="border: none; border-bottom: 1px solid red">
-                                                </td>
-                                            @endforeach
-                                            <td><input type="number" class="form-control" name="" readonly></td>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">نوع النتيجة </label>
+                            <input type="test" class="form-control" id="type_result" name="type_result">
                         </div>
-                        <div class="shopping-cart-footer">
-                            <div class="column"><button type="submit" class="btn btn-success" href="">اضافة</button>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">السنة الدراسية </label>
+                            <input type="date" class="form-control" id="year" name="year">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">اسم الطالب</label>
+                            <select name="student" id="student" class="form-control" required>
+                                <option value="" selected disabled> --حدد الطالب--</option>
+                                @foreach ($students as $student)
+                                    <option value={{ $student->id }}>{{ $student->name }} {{ $student->parent->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <hr class="m-3">
+                        @foreach ($subject_names as $subject)
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">اسم المادة</label>
+                                        <input type="test" class="form-control" value="{{ $subject->name }}"
+                                            id="subject_name" name="subject_name">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">درجة مادة</label>
+                                        <input type="number" class="form-control" id="marks" name="mark">
+                                    </div>
+                                </div>
                             </div>
+                        @endforeach
+                        <hr class="m-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">المعدل التراكمي</label>
+                            <input type="test" class="form-control" id="GAP" name="gap">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">تاكيد</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+        <!-- End Basic modal -->
+
+
+    </div>
+
+    <div class="modal fade" id="soft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">فصل المعلم</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="{{ route('teacher.soft') }}" method="post">
+                        @method('DELETE')
+                        @csrf
+                </div>
+                <div class="modal-body">
+                    هل انت متاكد من عملية الفصل ؟
+                    <input type="hidden" name="id" id="teacher_id" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-danger">تاكيد</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- start freeze modal --}}
+    <div class="modal fade" id="freeze" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">تجميد المعلم</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="{{ route('teacher.freeze') }}" method="post">
+                        @csrf
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="teacher_id" value="">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">سبب التجميد</label>
+                        <input type="test" class="form-control" id="teachers_phone" name="freeze_reason">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">تاريخ التجميد</label>
+                        <input type="date" class="form-control" id="teachers_phone" name="date">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-danger">تاكيد</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- end freeze modal --}}
+    <!-- ارشيف الفاتورة -->
+    <div class="modal fade" id="Transfer_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ارشفة الفاتورة</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="" method="post">
+                        {{ method_field('delete') }}
+                        {{ csrf_field() }}
+                </div>
+                <div class="modal-body">
+                    هل انت متاكد من عملية الارشفة ؟
+                    <input type="hidden" name="invoice_id" id="invoice_id" value="">
+                    <input type="hidden" name="id_page" id="id_page" value="2">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-success">تاكيد</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     </div>
     <!-- row closed -->
     </div>
@@ -97,45 +286,53 @@
     <!-- main-content closed -->
 @endsection
 @section('js')
-    <!-- Internal Select2.min js -->
-    <script src="{{ URL::asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/select2.js') }}"></script>
-    <!-- Internal Nice-select js-->
-    <script src="{{ URL::asset('assets/plugins/jquery-nice-select/js/jquery.nice-select.js') }}"></script>
-    <script src="{{ URL::asset('assets/plugins/jquery-nice-select/js/nice-select.js') }}"></script>
-
+    <!-- Internal Data tables -->
+    <script src="{{ URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
+    <!--Internal  Datatable js -->
+    <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
+    <!--Internal  Notify js -->
+    <script src="{{ URL::asset('assets/plugins/notify/js/notifIt.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/notify/js/notifit-custom.js') }}"></script>
 
     <script>
         $('#soft').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
-            var student_id = button.data('student_id')
+            var teacher_id = button.data('teacher_id')
             var modal = $(this)
-            modal.find('.modal-body #student_id').val(student_id);
+            modal.find('.modal-body #teacher_id').val(teacher_id);
         })
     </script>
     <script>
-        $('#problme').on('show.bs.modal', function(event) {
+        $('#freeze').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
-            var student_id = button.data('student_id')
+            var teacher_id = button.data('teacher_id')
             var modal = $(this)
-            modal.find('.modal-body #student_id').val(student_id);
+            modal.find('.modal-body #teacher_id').val(teacher_id);
+        })
+    </script>
+    <script>
+        $('#Transfer_invoice').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var invoice_id = button.data('invoice_id')
+            var modal = $(this)
+            modal.find('.modal-body #invoice_id').val(invoice_id);
         })
     </script>
 
-    <script>
-        $('#editresult').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            // var result_student_name = button.data('result_student_name')
-            // var result_subject_name = button.data('result_subject_name')
-            // var result_exam_date = button.data('result_exam_date')
-            var result_marks = button.data('result_marks')
-            var modal = $(this)
-            modal.find('.modal-body #id').val(id);
-            // modal.find('.modal-body #result_student_name').val(result_student_name);
-            // modal.find('.modal-body #result_subject_name').val(result_subject_name);
-            // modal.find('.modal-body #result_exam_date').val(result_exam_date);
-            modal.find('.modal-body #result_marks').val(result_marks);
-        })
-    </script>
+
 @endsection

@@ -8,6 +8,8 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\ClassRoom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
+use SplDoublyLinkedList;
 
 class ResultController extends Controller
 {
@@ -39,7 +41,7 @@ class ResultController extends Controller
         $subject_names = Exam::all('id','name');
 
         return view('admin.content.results.show_result',
-        compact('class_name', 'subject_names', 'students', 'exams'));
+        compact('class_name', 'subject_names', 'students', 'exams', 'id'));
     }
 
 
@@ -50,16 +52,8 @@ class ResultController extends Controller
 
         return response()->json($data);
     }
-    public function store(Request $request) {
+    public function store(Request $request){
         return $request;
-        Result::create([
-            'student_id'   => $request->student,
-            'subject_id'   => $request->subject,
-            'exam_id'      => $request->exam,
-            'marks'        => $request->marks
-        ]);
-        session()->flash('Add', 'تم اضافة النتيجة بنجاح');
-        return back();
     }
 
     public function update(Request $request) {

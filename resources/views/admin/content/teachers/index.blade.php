@@ -45,6 +45,15 @@
         </div>
     @endif
 
+    @if (session()->has('send'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ session()->get('send') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     @if (session()->has('delete'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>{{ session()->get('delete') }}</strong>
@@ -88,9 +97,6 @@
         <div class="col-xl-12">
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
-                    <a data-effect="effect-scale" data-toggle="modal" href="#addteacher"
-                        class="modal-effect btn btn-sm btn-primary" style="color:white"><i class="fas fa-plus"></i>&nbsp;
-                        اضافة استاذ</a>
 
                 </div>
                 <div class="card-body">
@@ -150,18 +156,19 @@
                                                     <a class="dropdown-item" href="#"
                                                         data-teacher_id="{{ $teachers->id }}" data-toggle="modal"
                                                         data-target="#soft"><i
-                                                            class="text-danger fas fa-sign-out"></i>&nbsp;&nbsp;فصل
+                                                            class="text-danger fas fa-sign-out-alt"></i>&nbsp;&nbsp;فصل
                                                         المعلم</a>
                                                     <a class="dropdown-item" href="#freeze"
                                                         data-teacher_id="{{ $teachers->id }}" data-toggle="modal"
                                                         data-target="#freeze"><i
                                                             class="text-warning fas fa-balance-scale"></i>&nbsp;&nbsp;تجميد
                                                         المعلم</a>
-                                                    {{-- <a class="dropdown-item"
-                                                        href="{{ route('account.print', $teachers->id) }}"><i
-                                                            class="text-success fas fa-print"></i>&nbsp;&nbsp;طباعة
-                                                        البيانات
-                                                    </a> --}}
+                                                    <a class="dropdown-item" href="#"
+                                                        data-mail_teacher="{{ $teachers->email }}" data-toggle="modal"
+                                                        data-target="#send_mail"><i
+                                                            class="text-success fas fa-paper-plane"></i>&nbsp;&nbsp;تواصل
+                                                        مع
+                                                        المعلم</a>
                                                 </div>
                                             </div>
 
@@ -178,145 +185,40 @@
         <!--/div-->
     </div>
 
-    {{-- start add modal  --}}
-    <div class="modal" id="addteacher">
+    {{-- start sand messages to teacher  --}}
+    <div class="modal fade" id="send_mail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content modal-content-demo">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">اضافة معلم</h6><button aria-label="Close" class="close"
-                        data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="exampleModalLabel">ارسال الرسالة الي المعلم</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <form action="{{ route('teacher.send.message') }}" method="post">
+                        @csrf
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('teacher.store') }}" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
-                        @csrf
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">اسم معلم</label>
-                            <input type="text" class="form-control" id="teacher_name" name="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">البريد الالكتروني</label>
-                            <input type="email" class="form-control" id="teacher_name" name="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">صورة</label>
-                            <input type="file" name="file" class="dropify"
-                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
-                        </div>
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الجنس</label>
-                        <select name="gender" id="gander" class="form-control" required>
-                            <option value="" selected disabled> --حدد الجنس--</option>
-                            <option value="ذكر">ذكر</option>
-                            <option value="انثي">انثي</option>
-                        </select>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">العنوان </label>
-                            <input type="test" class="form-control" id="section_name" name="address">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">رقم الهاتف</label>
-                            <input type="test" class="form-control" id="section_name" name="phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">تاريخ الانضمام</label>
-                            <input type="date" class="form-control" id="section_name" name="join_date">
-                        </div>
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
-                        <select name="department" id="department" class="form-control" required>
-                            <option value="" selected disabled> --حدد القسم--</option>
-                            @foreach ($departments as $department)
-                                <option value={{ $department->id }}>{{ $department->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">الراتب</label>
-                            <input type="number" class="form-control" id="section_name" name="salary">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">تاكيد</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                        </div>
-                    </form>
+                    <input type="hidden" name="mail" id="mail" value="">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">عنوان الرسالة</label>
+                        <input type="test" class="form-control" id="titel_message" name="titel_message"
+                            autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">موضوع الرسالة </label>
+                        <textarea name="subject_message" class="form-control" id="subject_message" cols="30" rows="7"></textarea>
+                    </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                    <button type="submit" class="btn btn-danger">ارسال</button>
+                </div>
+                </form>
             </div>
         </div>
-        <!-- End Basic modal -->
-
-
     </div>
-    {{-- end add modal  --}}
-
-    {{-- statr edit account modal  --}}
-    {{-- <div class="modal" id="edit_teacher">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-content-demo">
-                <div class="modal-header">
-                    <h6 class="modal-title">تعديل بيانات المعلم</h6><button aria-label="Close" class="close"
-                        data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('teacher.update') }}" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
-                        @csrf
-                        @method('put')
-                        <input type="hidden" name="id" id="id" value="">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">اسم معلم</label>
-                            <input type="text" class="form-control" id="teachers_name" name="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">البريد الالكتروني</label>
-                            <input type="email" class="form-control" id="teachers_email" name="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">صورة</label>
-                            <input type="file" name="file" class="dropify" id="teachers_image"
-                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
-                        </div>
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">الجنس</label>
-                        <select name="gender" id="teachers_gender" class="form-control" required>
-                            <option value="" selected disabled> --حدد الجنس--</option>
-                            <option value="ذكر">ذكر</option>
-                            <option value="انثي">انثي</option>
-                        </select>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">العنوان </label>
-                            <input type="test" class="form-control" id="teachers_address" name="address">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">رقم الهاتف</label>
-                            <input type="test" class="form-control" id="teachers_phone" name="phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">تاريخ الانضمام</label>
-                            <input type="date" class="form-control" id="teachers_join_date" name="join_date">
-                        </div>
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
-                        <select name="department" id="teachers_department_id" class="form-control" required>
-                            <option value="" selected disabled> --حدد القسم--</option>
-                            @foreach ($departments as $department)
-                                <option value={{ $department->id }}>{{ $department->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">الراتب</label>
-                            <input type="number" class="form-control" id="teachers_salary" name="salary">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">تاكيد</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- End Basic modal -->
-
-
-    </div> --}}
-
-    {{-- end edit modal --}}
+    {{-- end sand messages to teacher  --}}
 
     <div class="modal fade" id="soft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -377,7 +279,6 @@
         </div>
     </div>
     {{-- end freeze modal --}}
-    <!-- ارشيف الفاتورة -->
     <div class="modal fade" id="Transfer_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -443,6 +344,14 @@
             var teacher_id = button.data('teacher_id')
             var modal = $(this)
             modal.find('.modal-body #teacher_id').val(teacher_id);
+        })
+    </script>
+    <script>
+        $('#send_mail').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var mail_teacher = button.data('mail_teacher')
+            var modal = $(this)
+            modal.find('.modal-body #mail').val(mail_teacher);
         })
     </script>
     <script>
