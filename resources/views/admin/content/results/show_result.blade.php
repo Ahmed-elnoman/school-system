@@ -87,32 +87,76 @@
         <!--div-->
         <div class="col-xl-12">
             <div class="card mg-b-20">
+                <div class="card-header pb-0 mb-3">
+                    <p class="text-warning">اختار المادة</p>
+                    @foreach ($exams as $exam)
+                        <a data-effect="effect-scale" href="{{ route('result.addResultSubject', $exam->id) }}"
+                            class="modal-effect btn btn-sm btn-primary mb-3" style="color:white"><i
+                                class="fas fa-plus"></i>&nbsp;
+                            {{ $exam->name }}</a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <!--/div-->
+    </div>
+
+    <div class="row">
+        <!--div-->
+        <div class="col-xl-12">
+            <div class="card mg-b-20">
                 <div class="card-header pb-0">
-                    <a data-effect="effect-scale" data-toggle="modal" href="#addteacher"
+                    <a data-effect="effect-scale" data-toggle="modal" href="#addsubject"
                         class="modal-effect btn btn-sm btn-primary" style="color:white"><i class="fas fa-plus"></i>&nbsp;
-                        اضافة نتيجة</a>
+                        اضافة </a>
+                    <a data-effect="effect-scale" href="" class="modal-effect btn btn-sm btn-danger"
+                        style="color:white"><i class="mdi mdi-printer ml-1"></i>&nbsp;
+                        طباعة الجدول </a>
 
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example1" class="table key-buttons text-md-nowrap"
-                            data-page-length='50'style="text-align: center">
+                        <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'
+                            style="text-align: center">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">اسم المعلم</th>
-                                    <th class="border-bottom-0">البريد الالكتروني</th>
-                                    <th class="border-bottom-0">الصوؤة</th>
-                                    <th class="border-bottom-0">الجنس</th>
-                                    <th class="border-bottom-0">العنوان</th>
-                                    <th class="border-bottom-0">الهاتف</th>
-                                    <th class="border-bottom-0">القسم</th>
-                                    <th class="border-bottom-0">الراتب</th>
-                                    <th class="border-bottom-0">تاريخ الانضمام</th>
+                                    <th class="border-bottom-0">اسم المادة</th>
+                                    <th class="border-bottom-0">اسم الاستاذ</th>
+                                    <th class="border-bottom-0">اليوم</th>
+                                    <th class="border-bottom-0">الزمن</th>
                                     <th class="border-bottom-0">العمليات</th>
                                 </tr>
                             </thead>
-
+                            <tbody>
+                                <?php $i = 0; ?>
+                                @foreach ($results as $time)
+                                    <?php $i++; ?>
+                                    <tr>
+                                        {{-- <td>{{ $i }}</td>
+                                        <td>{{ $time->subject->name }}</td>
+                                        <td>{{ $time->teacher->full_name }}</td>
+                                        <td>{{ $time->classRoom->name }}</td>
+                                        <td>{{ $time->day }}</td>
+                                        <td>{{ $time->time }}</td> --}}
+                                        <td>
+                                            {{-- @if ($time->id > 0)
+                                                <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+                                                    data-id="{{ $time->id }}"
+                                                    data-time_subject_name="{{ $time->subject->name }}"
+                                                    data-time_teacher_name="{{ $time->teacher->full_name }}"
+                                                    data-time_class_room_name="{{ $time->classRoom->name }}"
+                                                    data-time_teacher_day="{{ $time->day }}"
+                                                    data-time_teacher_time="{{ $time->time }}" data-toggle="modal"
+                                                    href="#editsubject" title="تعديل"><i class="las la-pen"></i></a>
+                                                <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+                                                    data-id="{{ $time->id }}" data-toggle="modal" href="#modaldemo9"
+                                                    title="حذف"><i class="las la-trash"></i></a>
+                                            @endif --}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -121,8 +165,9 @@
         <!--/div-->
     </div>
 
+
     {{-- start add modal  --}}
-    <div class="modal" id="addteacher">
+    <div class="modal" id="addResult">
         <div class="modal-dialog" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
@@ -144,24 +189,20 @@
                             <input type="date" class="form-control" id="year" name="year">
                         </div>
 
-                        <div class="form-group">
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">اسم الطالب</label>
-                            <select name="student" id="student" class="form-control" required>
-                                <option value="" selected disabled> --حدد الطالب--</option>
-                                @foreach ($students as $student)
-                                    <option value={{ $student->id }}>{{ $student->name }} {{ $student->parent->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="form-group" hidden>
+                            <label for="exampleInputEmail1">اسم المادة </label>
+                            <input type="test" readonly class="form-control" id="exam_id"
+                                value="{{ $exam->name }}" name="year">
                         </div>
                         <hr class="m-3">
-                        @foreach ($subject_names as $subject)
+                        @foreach ($students as $student)
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">اسم المادة</label>
-                                        <input type="test" class="form-control" value="{{ $subject->name }}"
-                                            id="subject_name" name="subject_name">
+                                        <label for="exampleInputEmail1">اسم الطالب</label>
+                                        <input type="test" class="form-control"
+                                            value="{{ $student->name }} {{ $student->parent->name }}" id="student_name"
+                                            name="{{ $student->id }}">
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -315,6 +356,14 @@
             var teacher_id = button.data('teacher_id')
             var modal = $(this)
             modal.find('.modal-body #teacher_id').val(teacher_id);
+        })
+    </script>
+    <script>
+        $('#addResult').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var exam_id = button.data('exam_id')
+            var modal = $(this)
+            modal.find('.modal-body #exam_id').val(exam_id);
         })
     </script>
     <script>

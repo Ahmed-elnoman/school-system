@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade')->onUpdate('cascade');
             $table->json('marks');
-            $table->string('GAP');
             $table->date('year');
             $table->string('type_result');
             $table->timestamps();

@@ -12,6 +12,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TimeTableController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityController;
 use App\Models\ChargeFor;
 use Illuminate\Support\Facades\Route;
 use App\Mail\Reqistration_teacher;
@@ -110,6 +111,7 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     // result routes
     Route::get('result/index', [ResultController::class, 'index'])->name('result.index');
     Route::get('result/search/new', [ResultController::class, 'searchNew'])->name('result.search.new');
+    Route::get('result/addResultSubject/{id}', 'ResultController@addResultSubject')->name('result.addResultSubject');
     Route::post('result/store', [ResultController::class, 'store'])->name('result.store');
     Route::get('result/time/{id}', [ResultController::class, 'resultTime'])->name('result.time');
     Route::put('result/update', [ResultController::class, 'update'])->name('result.update');
@@ -120,6 +122,11 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('time_table/show', [TimeTableController::class, 'show'])->name('time.show');
     Route::post('time_table/store', [TimeTableController::class, 'store'])->name('time.store');
     Route::get('time_table/print/{name}', [TimeTableController::class, 'print'])->name('time.print');
+
+    // activity routes
+    Route::get('activity/index','ActivityController@index')->name('activity.index');
+    Route::post('activity/store', [ActivityController::class, 'store'])->name('activity.store');
+    Route::delete('activity/delete', 'ActivityController@delete')->name('activity.delete');
 
 
 });

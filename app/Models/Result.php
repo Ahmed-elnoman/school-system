@@ -13,7 +13,9 @@ class Result extends Model
         'student_id',
         'subject_id',
         'exam_id',
-        'marks'
+        'marks',
+        'year',
+        'type_result'
     ];
 
     public function student() {

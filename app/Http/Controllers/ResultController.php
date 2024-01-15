@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\ClassRoom;
 use Illuminate\Http\Request;
+use Illuminate\View\View as ViewResponse;
 use Illuminate\Support\Facades\Redis;
 use SplDoublyLinkedList;
 
@@ -36,12 +37,12 @@ class ResultController extends Controller
         $class_name = ClassRoom::where('id', $id)->first();
         $students  = Student::where('classRoom_id', $id)->get();
         $exams     = Exam::where('class_room_id', $id)->get();
-        // $results   = Result::all();
+        $results   = Result::all();
 
-        $subject_names = Exam::all('id','name');
+        $subject_names = Exam::all();
 
         return view('admin.content.results.show_result',
-        compact('class_name', 'subject_names', 'students', 'exams', 'id'));
+        compact('class_name', 'subject_names', 'students', 'exams', 'id', 'results'));
     }
 
 
@@ -52,8 +53,40 @@ class ResultController extends Controller
 
         return response()->json($data);
     }
+
+    public function addResultSubject($id)  {
+       $name_subject = Exam::find($id);
+       $class_id     = ClassRoom::where('id', $name_subject->class_room_id)->first('id');
+       $students     = Student::where('classRoom_id', $class_id->id)->get();
+
+       return view('admin.content.results.add_result_subject', compact('name_subject', 'students'));
+    }
+
     public function store(Request $request){
-        return $request;
+        // return $request;
+        $request->validate([
+            'type_result'     => 'required|string',
+            'year'            => 'required|date',
+            'student_id'      => 'required|integer',
+            'exam_id'         => 'required',
+            'marks'           => 'required|max:100 | min:0'
+        ],[
+            'type_result.required' => 'الحقل نوع النتيجة اجباري',
+            'type_result.string'   => 'حقل النوع النتيجة يجب ان يكون من نص',
+
+            'year.required'        => 'حقل السنة الدراسية اجباري',
+            'year.date'            => 'حقل السنة الدراسية يجب ان يكون من نوع تاريج',
+
+            'student_id.required'  => 'حقل اسم الطالب اجباري',
+
+            'exam_id.required'     => 'حقل المادة اجباري',
+
+            'marks'                => 'حقل الدرجة اجباري'
+        ]);
+
+        Result::create($request->only('student_id', 'exam_id', 'marks', 'year', 'type_result'));
+        session()->flash('add', 'تم اضافة درجة النتيجة  بنجاح');
+        return back();
     }
 
     public function update(Request $request) {

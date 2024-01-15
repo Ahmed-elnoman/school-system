@@ -95,6 +95,7 @@
                     <li><a class="slide-item" href="{{ route('exam.index') }}">الامتحانات</a></li>
                     <li><a class="slide-item" href="{{ route('result.index') }}">النتايج</a></li>
                     <li><a class="slide-item" href="{{ route('result.search.new') }}" hidden>النتايج</a></li>
+                    <li><a class="slide-item" href="{{ route('activity.index') }}">نشاطات</a></li>
                     <li><a class="slide-item" href="{{ route('time.index') }}">الجداول</a></li>
                     <li><a class="slide-item" href="{{ route('time.show') }}" hidden>الجداول</a></li>
 
