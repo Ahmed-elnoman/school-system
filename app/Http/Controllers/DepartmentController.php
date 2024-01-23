@@ -19,10 +19,15 @@ class DepartmentController extends Controller
     }
 
     public function store(Request $request) {
+        // validator
+       $data =  $request->validate([
+        'name'  => 'required|string',
+       ],[
+        'name.required'  => 'حقل اسم القسم اجباري',
+        'name.string'    => 'حقل يجب ان يكون من نوع نص'
+       ]);
 
-        Department::create([
-            'name'   => $request->department_name
-        ]);
+        Department::create($data);
         session()->flash('Add', 'تم اضافة بنجاح');
         return back();
 
@@ -30,9 +35,7 @@ class DepartmentController extends Controller
 
     public function update(Request $request){
         $id = $request->id;
-        Department::where('id', $id)->update([
-            'name'  => $request->department_name
-        ]);
+        Department::where('id', $id)->update($request->only('name'));
         session()->flash('edit', 'تم التعديل بنجاح');
         return back();
     }

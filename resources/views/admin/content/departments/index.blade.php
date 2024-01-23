@@ -128,7 +128,7 @@
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">اسم القسم</label>
-                            <input type="text" class="form-control" id="section_name" name="department_name">
+                            <input type="text" class="form-control" id="section_name" name="name">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">تاكيد</button>
@@ -155,19 +155,18 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="{{ route('department.update') }}" method="post"
-                        autocomplete="off">
+                    <form action="{{ route('department.update') }}" method="post" autocomplete="off">
                         {{-- {{ method_field('patch') }} --}}
                         @csrf
                         @method('PUT')
                         <div class="form-group">
                             <input type="hidden" name="id" id="id" value="">
                             <label for="recipient-name" class="col-form-label">اسم القسم:</label>
-                            <input class="form-control" name="department_name" id="section_name" type="text">
+                            <input class="form-control" name="name" id="section_name" type="text">
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">تاكيد</button>
+                    <button type="submit" class="btn btn-success">تحديث</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
                 </div>
                 </form>

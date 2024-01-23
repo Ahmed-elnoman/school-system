@@ -101,71 +101,6 @@
         <!--/div-->
     </div>
 
-    <div class="row">
-        <!--div-->
-        <div class="col-xl-12">
-            <div class="card mg-b-20">
-                <div class="card-header pb-0">
-                    <a data-effect="effect-scale" data-toggle="modal" href="#addsubject"
-                        class="modal-effect btn btn-sm btn-primary" style="color:white"><i class="fas fa-plus"></i>&nbsp;
-                        اضافة </a>
-                    <a data-effect="effect-scale" href="" class="modal-effect btn btn-sm btn-danger"
-                        style="color:white"><i class="mdi mdi-printer ml-1"></i>&nbsp;
-                        طباعة الجدول </a>
-
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example1" class="table key-buttons text-md-nowrap" data-page-length='50'
-                            style="text-align: center">
-                            <thead>
-                                <tr>
-                                    <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">اسم المادة</th>
-                                    <th class="border-bottom-0">اسم الاستاذ</th>
-                                    <th class="border-bottom-0">اليوم</th>
-                                    <th class="border-bottom-0">الزمن</th>
-                                    <th class="border-bottom-0">العمليات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $i = 0; ?>
-                                @foreach ($results as $time)
-                                    <?php $i++; ?>
-                                    <tr>
-                                        {{-- <td>{{ $i }}</td>
-                                        <td>{{ $time->subject->name }}</td>
-                                        <td>{{ $time->teacher->full_name }}</td>
-                                        <td>{{ $time->classRoom->name }}</td>
-                                        <td>{{ $time->day }}</td>
-                                        <td>{{ $time->time }}</td> --}}
-                                        <td>
-                                            {{-- @if ($time->id > 0)
-                                                <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
-                                                    data-id="{{ $time->id }}"
-                                                    data-time_subject_name="{{ $time->subject->name }}"
-                                                    data-time_teacher_name="{{ $time->teacher->full_name }}"
-                                                    data-time_class_room_name="{{ $time->classRoom->name }}"
-                                                    data-time_teacher_day="{{ $time->day }}"
-                                                    data-time_teacher_time="{{ $time->time }}" data-toggle="modal"
-                                                    href="#editsubject" title="تعديل"><i class="las la-pen"></i></a>
-                                                <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-                                                    data-id="{{ $time->id }}" data-toggle="modal" href="#modaldemo9"
-                                                    title="حذف"><i class="las la-trash"></i></a>
-                                            @endif --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/div-->
-    </div>
-
-
     {{-- start add modal  --}}
     <div class="modal" id="addResult">
         <div class="modal-dialog" role="document">
@@ -191,8 +126,8 @@
 
                         <div class="form-group" hidden>
                             <label for="exampleInputEmail1">اسم المادة </label>
-                            <input type="test" readonly class="form-control" id="exam_id"
-                                value="{{ $exam->name }}" name="year">
+                            <input type="test" readonly class="form-control" id="exam_id" value="{{ $exam->name }}"
+                                name="year">
                         </div>
                         <hr class="m-3">
                         @foreach ($students as $student)
@@ -230,95 +165,7 @@
 
 
     </div>
-
-    <div class="modal fade" id="soft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">فصل المعلم</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <form action="{{ route('teacher.soft') }}" method="post">
-                        @method('DELETE')
-                        @csrf
-                </div>
-                <div class="modal-body">
-                    هل انت متاكد من عملية الفصل ؟
-                    <input type="hidden" name="id" id="teacher_id" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                    <button type="submit" class="btn btn-danger">تاكيد</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    {{-- start freeze modal --}}
-    <div class="modal fade" id="freeze" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تجميد المعلم</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <form action="{{ route('teacher.freeze') }}" method="post">
-                        @csrf
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="id" id="teacher_id" value="">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">سبب التجميد</label>
-                        <input type="test" class="form-control" id="teachers_phone" name="freeze_reason">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">تاريخ التجميد</label>
-                        <input type="date" class="form-control" id="teachers_phone" name="date">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                    <button type="submit" class="btn btn-danger">تاكيد</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    {{-- end freeze modal --}}
-    <!-- ارشيف الفاتورة -->
-    <div class="modal fade" id="Transfer_invoice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ارشفة الفاتورة</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <form action="" method="post">
-                        {{ method_field('delete') }}
-                        {{ csrf_field() }}
-                </div>
-                <div class="modal-body">
-                    هل انت متاكد من عملية الارشفة ؟
-                    <input type="hidden" name="invoice_id" id="invoice_id" value="">
-                    <input type="hidden" name="id_page" id="id_page" value="2">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                    <button type="submit" class="btn btn-success">تاكيد</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    @include('admin.content.results.show')
     </div>
     <!-- row closed -->
     </div>

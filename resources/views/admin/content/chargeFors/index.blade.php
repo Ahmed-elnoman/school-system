@@ -264,12 +264,11 @@
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">نوع الاستثناء </label>
-                            <input type="text" class="form-control" id="type" name="type_an_exception">
+                            <input type="text" class="form-control" id="type" name="type">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">وصف الاستثناء </label>
-                            <textarea name="description_an_exception" id="description_an_exception" class="form-control" cols="30"
-                                rows="4"></textarea>
+                            <textarea name="description" id="description_an_exception" class="form-control" cols="30" rows="4"></textarea>
                         </div>
 
                         <div class="form-group">
@@ -352,7 +351,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">وصف الاستثناء </label>
-                            <textarea name="description_an_exception" id="description" class="form-control" cols="30" rows="4"></textarea>
+                            <textarea name="description" id="description" class="form-control" cols="30" rows="4"></textarea>
                         </div>
 
                         <div class="form-group">

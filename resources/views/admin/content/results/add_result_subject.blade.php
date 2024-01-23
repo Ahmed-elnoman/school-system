@@ -71,8 +71,12 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">نوع النتيجة</label>
-                                    <input type="text" class="form-control" id="type_result" name="type_result"
-                                        value="{{ old('type_result') }}" />
+                                    <select name="type_result" id="type_result" class="form-control" required>
+                                        <option value="" selected disabled> --حدد نوع النتيجة--</option>
+                                        <option value="نتيجة شهرية"> نتيجة شهرية</option>
+                                        <option value="نتيجة الفصل الاول"> نتيجة الفصل الاول</option>
+                                        <option value="نتيجة النهاية"> نتيجة النهاية</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -131,6 +135,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    </div>
     </div>
 
 @endsection

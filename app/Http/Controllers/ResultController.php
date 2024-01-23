@@ -85,8 +85,22 @@ class ResultController extends Controller
         ]);
 
         Result::create($request->only('student_id', 'exam_id', 'marks', 'year', 'type_result'));
-        session()->flash('add', 'تم اضافة درجة النتيجة  بنجاح');
+        session()->flash('Add', 'تم اضافة درجة النتيجة  بنجاح');
         return back();
+    }
+
+
+    public function showStudentResult(Request $request) {
+        $student_id       = $request->student_id;
+        $student_name     = Student::where('id', $student_id)->first();
+        $student_results  = Result::where('student_id', $student_id)->get();
+        // return $student_name;
+        return view('admin.content.results.show_result_by_student', compact('student_results', 'student_name'));
+    }
+
+    public function showAllResult(Request $request) {
+       $allResult = Result::where('type_result', $request->type_result)->where('year',$request->year)->get();
+       return view('admin.content.results.show_all_result', compact('allResult'));
     }
 
     public function update(Request $request) {

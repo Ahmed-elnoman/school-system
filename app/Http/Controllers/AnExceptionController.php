@@ -13,24 +13,20 @@ class AnExceptionController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate([
-            'type_an_exception'            => ['required', 'string'],
-            'description_an_exception'     => ['required'],
+      $data = $request->validate([
+            'type'            => ['required', 'string'],
+            'description'     => ['required'],
             'discount_rate'                => ['required']
         ],[
-            'type_an_exception.required'   => __('حقل النوع الاستثناء اجباري'),
-            'type_an_exception.string'     => __('حقل النوع الاستثناء يجب ان يكون نص'),
+            'type.required'   => __('حقل النوع الاستثناء اجباري'),
+            'type.string'     => __('حقل النوع الاستثناء يجب ان يكون نص'),
 
-            'description_an_exception.required'     => __('حقل الوصف الاستثناء اجباري'),
+            'description.required'     => __('حقل الوصف الاستثناء اجباري'),
 
             'discount_rate.required'                => __('حقل نسبة الخصم اجباري'),
         ]);
 
-        AnException::create([
-            'type'                         => $request->type_an_exception,
-            'description'                  => $request->description_an_exception,
-            'discount_rate'                => $request->discount_rate
-        ]);
+        AnException::create($data);
         session()->flash('Add', 'تم اضافة حالة الاستثناء بنجاح');
         return back();
     }
@@ -38,30 +34,28 @@ class AnExceptionController extends Controller
 
     public function update(Request $request) {
         // return $request;
-        $request->validate([
+       $data = $request->validate([
             'type'            => ['required', 'string'],
-            'description_an_exception'     => ['required'],
+            'description'     => ['required'],
             'discount_rate'                => ['required']
         ],[
-            'type_an_exception.required'   => __('حقل النوع الاستثناء اجباري'),
-            'type_an_exception.string'     => __('حقل النوع الاستثناء يجب ان يكون نص'),
+            'type.required'   => __('حقل النوع الاستثناء اجباري'),
+            'type.string'     => __('حقل النوع الاستثناء يجب ان يكون نص'),
 
-            'description_an_exception.required'     => __('حقل الوصف الاستثناء اجباري'),
+            'description.required'     => __('حقل الوصف الاستثناء اجباري'),
 
             'discount_rate.required'                => __('حقل نسبة الخصم اجباري'),
         ]);
 
         $id = $request->id;
-
-        AnException::where('id' , $id)->update([
-            'type'                         => $request->type,
-            'description'                  => $request->description_an_exception,
-            'discount_rate'                => $request->discount_rate
-        ]);
+        AnException::where('id' , $id)->update($data);
         session()->flash('edit', 'تم تعديل حالة الاستثناء بنجاح');
         return back();
     }
+
+
     public function delete(Request $request) {
+
         $id =  $request->id;
 
         AnException::destroy($id);
